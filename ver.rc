@@ -1,0 +1,26 @@
+1 VERSIONINFO
+FILEVERSION 1, 0, 0, 0
+PRODUCTVERSION 1, 0, 0, 0
+FILEOS 1
+FILETYPE 1
+BEGIN
+	BLOCK "StringFileInfo"
+	BEGIN
+		BLOCK "040904E4"
+		BEGIN
+			VALUE "CompanyName", "Multipli Machinery Corp.\000\000"
+			VALUE "FileDescription", "Multipli Machinery Study Program\000"
+			VALUE "FileVersion", "1.00\000\000"
+			VALUE "InternalName", "MACHSTDY\000\000"
+			VALUE "LegalCopyright", "Copyright © 1994 Multipli Machinery\000\000"
+			VALUE "OriginalFilename", "MACHSTDY.EXE\000"
+		END
+
+	END
+
+	BLOCK "VarFileInfo"
+	BEGIN
+		VALUE "Translation", 1033, 1252
+	END
+
+END
