@@ -203,7 +203,7 @@ begin
   if Result = IDCancel then PostQuitMessage(0);
 }
 
-  if ShowUserInfo(@Self, 'Cylinder Machine Study Program V1.1',
+  if ShowUserInfo(@Self, 'Cylinder Machine Study Program V1.1a',
   		         UserInfoFileName, True)<>0 then
     PostQuitMessage(-1);
 

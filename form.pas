@@ -435,14 +435,26 @@ end;
 procedure TFormDialog.SetupWindow;
 var
   TempStr: array[0..SNumWidth+1] of Char;
+  i: Integer;
 begin
   inherited SetupWindow;
   StrPCopy(TempStr, Real2String(GetFormationConst, NumWPrec, NumDPrec));
   FormConstEdit^.SetText(TempStr);
   if OtherBox^.GetCheck=bf_UnChecked then
+  begin
+    for i:=0 to NumCylTypes do
+      EnableWindow(CylType[i]^.HWindow, True);
+    for i:=0 to NumBoardTypes do
+      EnableWindow(BoardType[i]^.HWindow, True);
     EnableWindow(FormConstEdit^.HWindow, False)
-  else
+  end else
+  begin
+    for i:=0 to NumCylTypes do
+      EnableWindow(CylType[i]^.HWindow, False);
+    for i:=0 to NumBoardTypes do
+      EnableWindow(BoardType[i]^.HWindow, False);
     EnableWindow(FormConstEdit^.HWindow, True);
+  end;
 end;
 
 procedure TFormDialog.OtherToggle(var Msg: TMessage);
