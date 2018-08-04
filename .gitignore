@@ -1,0 +1,17 @@
+/.project
+*.pro.user*
+CMakeLists.txt.user*
+
+.make.cache
+.qmake.cache
+.qmake.vars
+
+*~
+*.orig
+*.temp
+
+# Build targets:
+/**/build-*/
+
+# Junk Folders:
+/**/junk

@@ -1,0 +1,38 @@
+<RCC>
+<!--
+****************************************************************************
+**
+** Multipli Machine Study Application
+** Copyright (C) 2018 Multipli Machinery, Corp.
+** Contact: http://multiplimachine.com/
+**
+** This file is part of the Multipli Machine Study Application,
+** written and developed for Multipli Machinery by Donald Whisnant.
+**
+** GNU General Public License Usage
+** This file may be used under the terms of the GNU General Public License
+** version 3.0 as published by the Free Software Foundation and appearing
+** in the file gpl-3.0.txt included in the packaging of this file. Please
+** review the following information to ensure the GNU General Public License
+** version 3.0 requirements will be met:
+** http://www.gnu.org/copyleft/gpl.html.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and
+** Multipli Machinery Corp.
+**
+****************************************************************************
+-->
+	<qresource prefix="/">
+		<file>res/file-new-icon2.png</file>
+		<file>res/open-file-icon3.png</file>
+		<file>res/save-file-icon3.png</file>
+		<file>res/printer1.png</file>
+		<file>res/exit.png</file>
+		<file>res/arrow-left.png</file>
+		<file>res/arrow-up.png</file>
+		<file>res/arrow-right.png</file>
+		<file>res/arrow-down.png</file>
+	</qresource>
+</RCC>
