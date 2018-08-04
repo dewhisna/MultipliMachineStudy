@@ -579,6 +579,8 @@ void CFormationCalcDialog::doVatsCalc()
 
 void CFormationCalcDialog::doProductionCalc()
 {
+	double nOrigFormConst;
+	validateFormConst(&nOrigFormConst, false);
 	CProductionCalcDialog dlgProd(false, m_bMetric, this);
 	validateSheetWidth(&dlgProd.m_DialogValues.m_nSheetWidth, false);
 	dlgProd.m_DialogValues.m_nMachineSpeed = m_DialogValues.m_nMachineSpeed;
@@ -597,23 +599,31 @@ void CFormationCalcDialog::doProductionCalc()
 		// Note: Basis Weight will automatically recalculate itself
 		ui->editYieldPerDay->setText(QString().setNum(m_bMetric ? toMetric(dlgProd.m_DialogValues.m_nYieldPerDay, YieldPerDayConv) : dlgProd.m_DialogValues.m_nYieldPerDay));
 		// Note: Machine Speed will automatically recalculate itself
-		if (QMessageBox::question(this, tr("Recalculation Request"), tr("Do you wish to recalc the forming rate?")) == QMessageBox::Yes) {
-			ui->checkBoxOther->setChecked(true);
-			double nYieldPerDay;
-			validateYieldPerDay(&nYieldPerDay, false);
-			if (m_DialogValues.m_nMachineEfficiency) nYieldPerDay /= m_DialogValues.m_nMachineEfficiency;
-			double nSheetWidth;
-			int nNumberOfVats;
-			double nFormConst;
-			if ((validateSheetWidth(&nSheetWidth, false)) &&
-				(validateNumberOfVats(&nNumberOfVats, false))) {
-				nFormConst = (nYieldPerDay/nNumberOfVats)/nSheetWidth;
+		double nYieldPerDay;
+		validateYieldPerDay(&nYieldPerDay, false);
+		if (m_DialogValues.m_nMachineEfficiency) nYieldPerDay /= m_DialogValues.m_nMachineEfficiency;
+		double nSheetWidth;
+		int nNumberOfVats;
+		double nFormConst;
+		bool bFormConstValid = false;
+		bool bFormDelta = true;
+		if ((validateSheetWidth(&nSheetWidth, false)) &&
+			(validateNumberOfVats(&nNumberOfVats, false))) {
+			nFormConst = (nYieldPerDay/nNumberOfVats)/nSheetWidth;
+			bFormConstValid = true;
+			bFormDelta = (fabs(nFormConst-nOrigFormConst) > 0.0001);
+		}
+		if (bFormConstValid) {
+			if (bFormDelta && QMessageBox::question(this, tr("Recalculation Request"), tr("Do you wish to recalc the forming rate?")) == QMessageBox::Yes) {
+				ui->checkBoxOther->setChecked(true);
 				ui->editFormConst->setText(QString().setNum(m_bMetric ? toMetric(nFormConst, FormConv) : nFormConst));
+				if (bAutoCalcSave) {
+					ui->checkBoxAutoCalc->setChecked(true);
+				}
 			} else {
-				ui->editFormConst->setText(QString());
-			}
-			if (bAutoCalcSave) {
-				ui->checkBoxAutoCalc->setChecked(true);
+				if (bAutoCalcSave && !bFormDelta) {
+					ui->checkBoxAutoCalc->setChecked(true);
+				}
 			}
 		}
 	}
