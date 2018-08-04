@@ -511,9 +511,6 @@ void CFormationCalcDialog::doFormConstOtherCalc()
 	dlgFormConst.m_DialogValues.m_nNumberOfVats = nNumberOfVats;
 	validateYieldPerDay(&nYieldPerDay, false);
 	dlgFormConst.m_DialogValues.m_nYieldPerDay = nYieldPerDay;
-	if (m_DialogValues.m_nMachineEfficiency) {
-		dlgFormConst.m_DialogValues.m_nYieldPerDay /= m_DialogValues.m_nMachineEfficiency;
-	}
 	int nResult = dlgFormConst.exec();
 	if (nResult == QDialog::Accepted) {
 		ui->editFormConst->setText(QString().setNum(m_bMetric ? toMetric(dlgFormConst.m_DialogValues.m_nFormConst, FormConv) : dlgFormConst.m_DialogValues.m_nFormConst));
