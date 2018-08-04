@@ -27,6 +27,10 @@
 
 #include <QMainWindow>
 #include <QAction>
+#include <QPointer>
+
+#include "PipeFlowCalcDialog.h"
+#include "AreaFlowCalcDialog.h"
 
 // =============================================================================
 
@@ -77,11 +81,15 @@ protected slots:
 	void en_HelpAbout();
 
 	// ----------
-	void en_InsertText(const QString &strText);
 	void en_TextChanged();
 
+public slots:
+	void insertText(const QString &strText);
+	void insertFlowPipeText(const CPipeFlowCalcDialog::TDialogValues &values);
+	void insertFlowAreaText(const CAreaFlowCalcDialog::TDialogValues &values);
+
 protected:
-	void TextOutputStart();
+	void TextOutputStart(bool bSkipCustomer = false, bool bSkipAppend = false);
 
 private:
 	bool m_bMetric;
@@ -91,6 +99,8 @@ private:
 	QAction *m_pMetricAction;
 	Ui::CMainWindow *ui;
 };
+
+extern QPointer<CMainWindow> g_pMyMainWindow;
 
 // =============================================================================
 

@@ -37,8 +37,6 @@
 #include "GradeCalcDialog.h"
 #include "HeadBoxDilutionDialog.h"
 #include "FormConstDialog.h"
-#include "PipeFlowCalcDialog.h"
-#include "AreaFlowCalcDialog.h"
 
 // =============================================================================
 
@@ -226,9 +224,9 @@ void CMainWindow::en_SetupMetric()
 
 // -------------------------------------
 
-void CMainWindow::TextOutputStart()
+void CMainWindow::TextOutputStart(bool bSkipCustomer, bool bSkipAppend)
 {
-	if (m_bHaveTextOutput) {
+	if (m_bHaveTextOutput && !bSkipAppend) {
 		int nAppendResult = QMessageBox::question(this, tr("Machine Study Print File Output"), tr("Append to Print File?"));
 		if (nAppendResult == QMessageBox::No) {
 			ui->editMainText->clear();
@@ -247,6 +245,8 @@ void CMainWindow::TextOutputStart()
 		ui->editMainText->append(QString());
 		m_bHaveTextOutput = true;
 	}
+
+	if (bSkipCustomer) return;
 
 	CCustomerDialog dlgCustomer(this);
 	dlgCustomer.m_DialogValues.m_strCustomer = m_strLastCustomer;
@@ -610,36 +610,7 @@ void CMainWindow::en_FlowPipe()
 	int nResult = dlgPipeFlow.exec();
 	if (nResult == QDialog::Accepted) {
 		TextOutputStart();
-
-		QString strTemp;
-		ui->editMainText->append("Pipe Sizing Calculation Window:");
-		ui->editMainText->append("-------------------------------");
-		if (m_bMetric) {
-			strTemp = "Velocity (meters/sec): ";
-			strTemp += QString().setNum(toMetric(dlgPipeFlow.m_DialogValues.m_nVelocity, VelocityConv));
-		} else {
-			strTemp = "Velocity (ft/sec): ";
-			strTemp += QString().setNum(dlgPipeFlow.m_DialogValues.m_nVelocity);
-		}
-		ui->editMainText->append(strTemp);
-		if (m_bMetric) {
-			strTemp = "Liters Per Minute: ";
-			strTemp += QString().setNum(toMetric(dlgPipeFlow.m_DialogValues.m_nWaterNeeded, WaterNeededConv));
-		} else {
-			strTemp = "Gallons Per Minute: ";
-			strTemp += QString().setNum(dlgPipeFlow.m_DialogValues.m_nWaterNeeded);
-		}
-		ui->editMainText->append(strTemp);
-		if (m_bMetric) {
-			strTemp = "Pipe Size I.D. (mm): ";
-			strTemp += QString().setNum(toMetric(dlgPipeFlow.m_DialogValues.m_nPipeSizeID, PipeConv));
-		} else {
-			strTemp = "Pipe Size I.D. (in.): ";
-			strTemp += QString().setNum(dlgPipeFlow.m_DialogValues.m_nPipeSizeID);
-		}
-		ui->editMainText->append(strTemp);
-		ui->editMainText->append(QString());
-		ui->editMainText->append(QString());
+		insertFlowPipeText(dlgPipeFlow.m_DialogValues);
 	}
 }
 
@@ -649,36 +620,7 @@ void CMainWindow::en_FlowArea()
 	int nResult = dlgAreaFlow.exec();
 	if (nResult == QDialog::Accepted) {
 		TextOutputStart();
-
-		QString strTemp;
-		ui->editMainText->append("Area Sizing Calculation Window:");
-		ui->editMainText->append("-------------------------------");
-		if (m_bMetric) {
-			strTemp = "Velocity (meters/sec): ";
-			strTemp += QString().setNum(toMetric(dlgAreaFlow.m_DialogValues.m_nVelocity, VelocityConv));
-		} else {
-			strTemp = "Velocity (ft/sec): ";
-			strTemp += QString().setNum(dlgAreaFlow.m_DialogValues.m_nVelocity);
-		}
-		ui->editMainText->append(strTemp);
-		if (m_bMetric) {
-			strTemp = "Liters Per Minute: ";
-			strTemp += QString().setNum(toMetric(dlgAreaFlow.m_DialogValues.m_nWaterNeeded, WaterNeededConv));
-		} else {
-			strTemp = "Gallons Per Minute: ";
-			strTemp += QString().setNum(dlgAreaFlow.m_DialogValues.m_nWaterNeeded);
-		}
-		ui->editMainText->append(strTemp);
-		if (m_bMetric) {
-			strTemp = "Cross Sectional Area (Sq. mm): ";
-			strTemp += QString().setNum(toMetric(dlgAreaFlow.m_DialogValues.m_nCrossSectArea, AreaConv));
-		} else {
-			strTemp = "Cross Sectional Area (Sq. In.): ";
-			strTemp += QString().setNum(dlgAreaFlow.m_DialogValues.m_nCrossSectArea);
-		}
-		ui->editMainText->append(strTemp);
-		ui->editMainText->append(QString());
-		ui->editMainText->append(QString());
+		insertFlowAreaText(dlgAreaFlow.m_DialogValues);
 	}
 }
 
@@ -694,10 +636,82 @@ void CMainWindow::en_HelpAbout()
 
 // -------------------------------------
 
-void CMainWindow::en_InsertText(const QString &strText)
+void CMainWindow::insertText(const QString &strText)
 {
+	TextOutputStart(true, true);
+
 	ui->editMainText->append(strText);
 	m_bHaveTextOutput = true;
+}
+
+void CMainWindow::insertFlowPipeText(const CPipeFlowCalcDialog::TDialogValues &values)
+{
+	TextOutputStart(true, true);
+
+	QString strTemp;
+	ui->editMainText->append("Pipe Sizing Calculation Window:");
+	ui->editMainText->append("-------------------------------");
+	if (m_bMetric) {
+		strTemp = "Velocity (meters/sec): ";
+		strTemp += QString().setNum(toMetric(values.m_nVelocity, VelocityConv));
+	} else {
+		strTemp = "Velocity (ft/sec): ";
+		strTemp += QString().setNum(values.m_nVelocity);
+	}
+	ui->editMainText->append(strTemp);
+	if (m_bMetric) {
+		strTemp = "Liters Per Minute: ";
+		strTemp += QString().setNum(toMetric(values.m_nWaterNeeded, WaterNeededConv));
+	} else {
+		strTemp = "Gallons Per Minute: ";
+		strTemp += QString().setNum(values.m_nWaterNeeded);
+	}
+	ui->editMainText->append(strTemp);
+	if (m_bMetric) {
+		strTemp = "Pipe Size I.D. (mm): ";
+		strTemp += QString().setNum(toMetric(values.m_nPipeSizeID, PipeConv));
+	} else {
+		strTemp = "Pipe Size I.D. (in.): ";
+		strTemp += QString().setNum(values.m_nPipeSizeID);
+	}
+	ui->editMainText->append(strTemp);
+	ui->editMainText->append(QString());
+	ui->editMainText->append(QString());
+}
+
+void CMainWindow::insertFlowAreaText(const CAreaFlowCalcDialog::TDialogValues &values)
+{
+	TextOutputStart(true, true);
+
+	QString strTemp;
+	ui->editMainText->append("Area Sizing Calculation Window:");
+	ui->editMainText->append("-------------------------------");
+	if (m_bMetric) {
+		strTemp = "Velocity (meters/sec): ";
+		strTemp += QString().setNum(toMetric(values.m_nVelocity, VelocityConv));
+	} else {
+		strTemp = "Velocity (ft/sec): ";
+		strTemp += QString().setNum(values.m_nVelocity);
+	}
+	ui->editMainText->append(strTemp);
+	if (m_bMetric) {
+		strTemp = "Liters Per Minute: ";
+		strTemp += QString().setNum(toMetric(values.m_nWaterNeeded, WaterNeededConv));
+	} else {
+		strTemp = "Gallons Per Minute: ";
+		strTemp += QString().setNum(values.m_nWaterNeeded);
+	}
+	ui->editMainText->append(strTemp);
+	if (m_bMetric) {
+		strTemp = "Cross Sectional Area (Sq. mm): ";
+		strTemp += QString().setNum(toMetric(values.m_nCrossSectArea, AreaConv));
+	} else {
+		strTemp = "Cross Sectional Area (Sq. In.): ";
+		strTemp += QString().setNum(values.m_nCrossSectArea);
+	}
+	ui->editMainText->append(strTemp);
+	ui->editMainText->append(QString());
+	ui->editMainText->append(QString());
 }
 
 void CMainWindow::en_TextChanged()

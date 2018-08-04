@@ -27,6 +27,7 @@
 
 #include "conversion.h"
 
+#include "MainWindow.h"
 #include "GradeCalcDialog.h"
 #include "PipeFlowCalcDialog.h"
 #include "AreaFlowCalcDialog.h"
@@ -534,7 +535,8 @@ void CFormationCalcDialog::doPipeSizing()
 	dlgPipeFlow.m_DialogValues.m_nWaterNeeded = m_DialogValues.m_nWaterNeededPerVat;
 	int nResult = dlgPipeFlow.exec();
 	if (nResult == QDialog::Accepted) {
-		// TODO : Figure out how to "save" output here back to the output stream
+		assert(!g_pMyMainWindow.isNull());
+		g_pMyMainWindow->insertFlowPipeText(dlgPipeFlow.m_DialogValues);
 	}
 }
 
@@ -544,7 +546,8 @@ void CFormationCalcDialog::doAreaSizing()
 	dlgAreaFlow.m_DialogValues.m_nWaterNeeded = m_DialogValues.m_nWaterNeededPerVat;
 	int nResult = dlgAreaFlow.exec();
 	if (nResult == QDialog::Accepted) {
-		// TODO : Figure out how to "save" output here back to the output stream
+		assert(!g_pMyMainWindow.isNull());
+		g_pMyMainWindow->insertFlowAreaText(dlgAreaFlow.m_DialogValues);
 	}
 }
 

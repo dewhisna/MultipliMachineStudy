@@ -25,10 +25,13 @@
 #include "MainWindow.h"
 #include <QApplication>
 
+QPointer<CMainWindow> g_pMyMainWindow = nullptr;
+
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
 	CMainWindow w;
+	g_pMyMainWindow = &w;
 	w.show();
 
 	return a.exec();
