@@ -348,6 +348,8 @@ int CFormationCalcDialog::exec()
 	ui->editMachineSpeed->setText(QString().setNum(m_bMetric ? toMetric(m_DialogValues.m_nMachineSpeed, MachineSpeedConv) : m_DialogValues.m_nMachineSpeed));
 	ui->editMachineEfficiency->setText(QString().setNum(m_DialogValues.m_nMachineEfficiency * 100.0));
 	setCylinderBoardType(m_DialogValues.m_nCylinderSize, m_DialogValues.m_nBoardType, m_DialogValues.m_bOtherFormConst);
+	calc1(false);
+	calc2(false);
 
 	ui->editCaliper->setFocus();
 
@@ -382,6 +384,20 @@ void CFormationCalcDialog::accept()
 	m_DialogValues.m_nConsistency = nConsistency;
 	m_DialogValues.m_nNumberOfVats = nNumberOfVats;
 	QDialog::accept();
+}
+
+void CFormationCalcDialog::reject()
+{
+	validateCaliper(&m_DialogValues.m_nCaliper, false);
+	validateDensity(&m_DialogValues.m_nDensity, false);
+	validateSheetWidth(&m_DialogValues.m_nSheetWidth, false);
+	validateFormConst(&m_DialogValues.m_nFormConst, false);
+	validateYieldPerDay(&m_DialogValues.m_nYieldPerDay, false);
+	validateConsistency(&m_DialogValues.m_nConsistency, false);
+	validateNumberOfVats(&m_DialogValues.m_nNumberOfVats, false);
+	calc1(false);
+	calc2(false);
+	QDialog::reject();
 }
 
 // -----------------------------------------------------------------------------

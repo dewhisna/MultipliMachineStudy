@@ -122,6 +122,7 @@ protected slots:
 	void en_changeAutoCalc();
 
 	virtual void accept() override;
+	virtual void reject() override;
 
 protected:
 	void setUIText();

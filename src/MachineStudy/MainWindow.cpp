@@ -264,8 +264,11 @@ void CMainWindow::TextOutputStart()
 
 void CMainWindow::en_FormationSheetFormation()
 {
+	static CFormationCalcDialog::TDialogValues persistentValues;
 	CFormationCalcDialog dlgForm(true, m_bMetric, this);
+	dlgForm.m_DialogValues = persistentValues;
 	int nResult = dlgForm.exec();
+	persistentValues = dlgForm.m_DialogValues;
 	if (nResult == QDialog::Accepted) {
 		TextOutputStart();
 
