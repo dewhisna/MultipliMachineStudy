@@ -30,6 +30,10 @@
 #include <QMenu>
 #include <QApplication>
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QFile>
+#include <QFileInfo>
+#include <QDir>
 
 #include "CustomerDialog.h"
 #include "FormationCalcDialog.h"
@@ -49,6 +53,8 @@ CMainWindow::CMainWindow(QWidget *parent) :
 	ui(new Ui::CMainWindow)
 {
 	ui->setupUi(this);
+
+	m_strMainWindowTitle = windowTitle();
 
 	QAction *pAction;
 
@@ -178,20 +184,93 @@ CMainWindow::~CMainWindow()
 
 // -----------------------------------------------------------------------------
 
+bool CMainWindow::PromptLoseChanges()
+{
+	if (m_bDirty &&
+		QMessageBox::question(this, tr("Lose Changes?"),
+						tr("You have made changes you haven't saved.  Lose your changes?"),
+						QMessageBox::Yes | QMessageBox::No, QMessageBox::No) != QMessageBox::Yes) {
+		return false;
+	}
+
+	return true;
+}
+
 void CMainWindow::en_NewFile()
 {
+	if (!PromptLoseChanges()) return;
+	ui->editMainText->clear();
+	QFileInfo fi(m_strFilename);
+	m_strFilename = fi.absoluteDir().absolutePath();
+	m_bHaveTextOutput = false;
+	m_bDirty = false;
+	setWindowTitle(m_strMainWindowTitle);
 }
 
 void CMainWindow::en_OpenFile()
 {
+	if (!PromptLoseChanges()) return;
+	while (1) {
+		QString strFilename = QFileDialog::getOpenFileName(this, tr("Select Text File"), m_strFilename,
+										tr("Text Files (*.txt);;All Files (*.*)"));
+		if (strFilename.isEmpty()) return;
+		m_strFilename = strFilename;
+		QFile file(strFilename);
+		if (!file.open(QIODevice::ReadOnly)) {
+			QMessageBox::critical(this, tr("Open Failed"), tr("Failed to open \"%s\" for reading.").arg(strFilename));
+			continue;
+		}
+		ui->editMainText->clear();
+		ui->editMainText->setPlainText(QString(file.readAll()));
+		file.close();
+		m_bHaveTextOutput = true;
+		m_bDirty = false;
+		setWindowTitle(QString("%1 - %2").arg(QFileInfo(m_strFilename).fileName()).arg(m_strMainWindowTitle));
+		break;
+	}
 }
 
 void CMainWindow::en_SaveFile()
 {
+	if (m_strFilename.isEmpty()) {
+		en_SaveFileAs();
+		return;
+	}
+
+	QFile file(m_strFilename);
+	if (!file.open(QIODevice::WriteOnly)) {
+		QMessageBox::critical(this, tr("Save Failed"), tr("Failed to open \"%s\" for writing.").arg(m_strFilename));
+		return;
+	}
+	file.write(ui->editMainText->toPlainText().toUtf8());
+	file.close();
+	m_bDirty = false;
+	setWindowTitle(QString("%1 - %2").arg(QFileInfo(m_strFilename).fileName()).arg(m_strMainWindowTitle));
 }
 
 void CMainWindow::en_SaveFileAs()
 {
+	while (1) {
+		QString strFilename = QFileDialog::getSaveFileName(this, tr("Select Text File"),
+										QFileInfo(m_strFilename).absoluteDir().absolutePath(),
+										tr("Text Files (*.txt);;All Files (*.*)"));
+		if (strFilename.isEmpty()) return;
+		QFileInfo fiNew(strFilename);
+		if (fiNew.baseName().compare(fiNew.fileName()) == 0) {
+			strFilename += ".txt";
+		}
+		m_strFilename = strFilename;
+		QFile file(strFilename);
+		if (!file.open(QIODevice::WriteOnly)) {
+			QMessageBox::critical(this, tr("Save Failed"), tr("Failed to open \"%s\" for writing.").arg(strFilename));
+			continue;
+		}
+		file.write(ui->editMainText->toPlainText().toUtf8());
+		file.close();
+		m_bDirty = false;
+		setWindowTitle(QString("%1 - %2").arg(QFileInfo(m_strFilename).fileName()).arg(m_strMainWindowTitle));
+		break;
+	}
 }
 
 void CMainWindow::en_PrintFile()
@@ -716,6 +795,9 @@ void CMainWindow::insertFlowAreaText(const CAreaFlowCalcDialog::TDialogValues &v
 
 void CMainWindow::en_TextChanged()
 {
+	if (!m_bDirty) {
+		setWindowTitle("*"+windowTitle());
+	}
 	m_bDirty = true;
 }
 

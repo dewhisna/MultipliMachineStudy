@@ -90,13 +90,16 @@ public slots:
 
 protected:
 	void TextOutputStart(bool bSkipCustomer = false, bool bSkipAppend = false);
+	bool PromptLoseChanges();
 
 private:
 	bool m_bMetric;
 	bool m_bHaveTextOutput;
 	QString m_strLastCustomer;
 	bool m_bDirty;
+	QString m_strFilename;
 	QAction *m_pMetricAction;
+	QString m_strMainWindowTitle;
 	Ui::CMainWindow *ui;
 };
 
