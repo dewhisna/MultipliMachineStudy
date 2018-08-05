@@ -34,6 +34,9 @@
 
 // =============================================================================
 
+// Forward declarations:
+class QPrinter;
+
 namespace Ui {
 	class CMainWindow;
 }
@@ -56,7 +59,9 @@ protected slots:
 	void en_SaveFile();
 	void en_SaveFileAs();
 	void en_PrintFile();
-	void en_PrintSetup();
+	void en_PrintPreview();
+	void en_print(QPrinter *printer);
+	void en_quit();
 
 	// --- Edit Menu
 	void en_Search();
@@ -98,6 +103,7 @@ private:
 	QString m_strLastCustomer;
 	bool m_bDirty;
 	QString m_strFilename;
+	QString m_strLastDirectory;
 	QAction *m_pMetricAction;
 	QString m_strMainWindowTitle;
 	Ui::CMainWindow *ui;

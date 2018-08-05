@@ -34,6 +34,10 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
+#include <QSharedPointer>
 
 #include "CustomerDialog.h"
 #include "FormationCalcDialog.h"
@@ -43,6 +47,8 @@
 #include "FormConstDialog.h"
 
 // =============================================================================
+
+static QSharedPointer<QPrinter> g_pPrinter;
 
 CMainWindow::CMainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -55,6 +61,15 @@ CMainWindow::CMainWindow(QWidget *parent) :
 	ui->setupUi(this);
 
 	m_strMainWindowTitle = windowTitle();
+
+	if (g_pPrinter.isNull()) {
+		g_pPrinter = QSharedPointer<QPrinter>(new QPrinter(QPrinter::HighResolution));
+		g_pPrinter->setPageSize(QPrinter::Letter);
+		g_pPrinter->setOrientation(QPrinter::Portrait);
+		g_pPrinter->setFullPage(true);
+		g_pPrinter->setOutputFormat(QPrinter::NativeFormat);
+		g_pPrinter->setCreator(QApplication::applicationName());
+	}
 
 	QAction *pAction;
 
@@ -83,12 +98,12 @@ CMainWindow::CMainWindow(QWidget *parent) :
 	pAction->setStatusTip(tr("Print Text Document", "MainMenu"));
 	pAction->setToolTip(tr("Print Text Document", "MainMenu"));
 	ui->mainToolBar->addAction(pAction);
-	pAction = pFileMenu->addAction(tr("P&rint Setup", "MainMenu"), this, SLOT(en_PrintSetup()));
-	pAction->setStatusTip(tr("Printer Setup", "MainMenu"));
-	pAction->setToolTip(tr("Printer Setup", "MainMenu"));
+	pAction = pFileMenu->addAction(tr("Print Previe&w", "MainMenu"), this, SLOT(en_PrintPreview()));
+	pAction->setStatusTip(tr("Print Preview", "MainMenu"));
+	pAction->setToolTip(tr("Print Preview", "MainMenu"));
 	pFileMenu->addSeparator();
 	ui->mainToolBar->addSeparator();
-	pAction = pFileMenu->addAction(QIcon(":/res/exit.png"), tr("E&xit", "MainMenu"), QCoreApplication::instance(), SLOT(quit()), QKeySequence(Qt::CTRL + Qt::Key_Q));
+	pAction = pFileMenu->addAction(QIcon(":/res/exit.png"), tr("E&xit", "MainMenu"), this, SLOT(en_quit()), QKeySequence(Qt::CTRL + Qt::Key_Q));
 	pAction->setStatusTip(tr("Quit Application", "MainMenu"));
 	pAction->setToolTip(tr("Quit Application", "MainMenu"));
 	ui->mainToolBar->addAction(pAction);
@@ -179,6 +194,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
 
 CMainWindow::~CMainWindow()
 {
+	g_pPrinter.clear();
 	delete ui;
 }
 
@@ -200,8 +216,8 @@ void CMainWindow::en_NewFile()
 {
 	if (!PromptLoseChanges()) return;
 	ui->editMainText->clear();
-	QFileInfo fi(m_strFilename);
-	m_strFilename = fi.absoluteDir().absolutePath();
+	m_strLastDirectory = QFileInfo(m_strFilename).absoluteDir().absolutePath();
+	m_strFilename.clear();
 	m_bHaveTextOutput = false;
 	m_bDirty = false;
 	setWindowTitle(m_strMainWindowTitle);
@@ -211,10 +227,12 @@ void CMainWindow::en_OpenFile()
 {
 	if (!PromptLoseChanges()) return;
 	while (1) {
-		QString strFilename = QFileDialog::getOpenFileName(this, tr("Select Text File"), m_strFilename,
+		QString strFilename = QFileDialog::getOpenFileName(this, tr("Select Text File"),
+										(m_strFilename.isEmpty() ? m_strLastDirectory : m_strFilename),
 										tr("Text Files (*.txt);;All Files (*.*)"));
 		if (strFilename.isEmpty()) return;
 		m_strFilename = strFilename;
+		m_strLastDirectory = QFileInfo(m_strFilename).absoluteDir().absolutePath();
 		QFile file(strFilename);
 		if (!file.open(QIODevice::ReadOnly)) {
 			QMessageBox::critical(this, tr("Open Failed"), tr("Failed to open \"%s\" for reading.").arg(strFilename));
@@ -252,7 +270,7 @@ void CMainWindow::en_SaveFileAs()
 {
 	while (1) {
 		QString strFilename = QFileDialog::getSaveFileName(this, tr("Select Text File"),
-										QFileInfo(m_strFilename).absoluteDir().absolutePath(),
+										m_strLastDirectory,
 										tr("Text Files (*.txt);;All Files (*.*)"));
 		if (strFilename.isEmpty()) return;
 		QFileInfo fiNew(strFilename);
@@ -260,6 +278,7 @@ void CMainWindow::en_SaveFileAs()
 			strFilename += ".txt";
 		}
 		m_strFilename = strFilename;
+		m_strLastDirectory = QFileInfo(m_strFilename).absoluteDir().absolutePath();
 		QFile file(strFilename);
 		if (!file.open(QIODevice::WriteOnly)) {
 			QMessageBox::critical(this, tr("Save Failed"), tr("Failed to open \"%s\" for writing.").arg(strFilename));
@@ -275,10 +294,34 @@ void CMainWindow::en_SaveFileAs()
 
 void CMainWindow::en_PrintFile()
 {
+	assert(!g_pPrinter.isNull());
+	if (g_pPrinter.isNull()) return;
+	g_pPrinter->setDocName(m_strFilename);
+	QPrintDialog dlgPrint(g_pPrinter.data(), this);
+	if (dlgPrint.exec() == QDialog::Accepted) {
+		ui->editMainText->print(g_pPrinter.data());
+	}
 }
 
-void CMainWindow::en_PrintSetup()
+void CMainWindow::en_PrintPreview()
 {
+	assert(!g_pPrinter.isNull());
+	if (g_pPrinter.isNull()) return;
+	g_pPrinter->setDocName(m_strFilename);
+	QPrintPreviewDialog dlgPrintPreview(g_pPrinter.data(), this);
+	connect(&dlgPrintPreview, SIGNAL(paintRequested(QPrinter*)), this, SLOT(en_print(QPrinter*)));
+	dlgPrintPreview.exec();
+}
+
+void CMainWindow::en_print(QPrinter *printer)
+{
+	ui->editMainText->print(printer);
+}
+
+void CMainWindow::en_quit()
+{
+	if (!PromptLoseChanges()) return;
+	QCoreApplication::instance()->quit();
 }
 
 // -------------------------------------
