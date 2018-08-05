@@ -25,7 +25,12 @@
 cmake_minimum_required(VERSION 3.1)
 set(CMAKE_CXX_STANDARD 11)
 
-project(MachineStudy LANGUAGES CXX)
+if(WIN32)
+	set(LANGUAGES CXX RC)
+else()
+	set(LANGUAGES CXX)
+endif()
+project(MachineStudy LANGUAGES ${LANGUAGES} VERSION 2.0.0.0)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -51,6 +56,12 @@ add_definitions(
 	-DQT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 )
 
+if(WIN32)
+	add_definitions(
+		-DWIN32_LEAN_AND_MEAN
+	)
+endif()
+
 # ---------------------------------------------------------
 
 set(SOURCES
@@ -58,7 +69,14 @@ set(SOURCES
 	"MachineStudy.qrc"
 	"conversion.h"
 	"KeyPressFilter.h"
+	"version.h"
 )
+
+SET(rc_file "MachineStudy.rc")
+SET(CMAKE_RC_FLAGS "${CMAKE_RC_FLAGS} -D_RUNNING_RC_COMPILER_ -I\"${CMAKE_CURRENT_BINARY_DIR}\" -I\"${CMAKE_CURRENT_SOURCE_DIR}\"")
+if(WIN32)
+	LIST(APPEND SOURCES ${rc_file})
+endif()
 
 set(MainWindow_SOURCES
 	"MainWindow.cpp"
@@ -120,6 +138,12 @@ set(YieldPerDayDialog_SOURCES
 	"YieldPerDayDialog.ui"
 )
 
+set(AboutDialog_SOURCES
+	"AboutDialog.cpp"
+	"AboutDialog.h"
+	"AboutDialog.ui"
+)
+
 #include_directories(
 #)
 
@@ -163,6 +187,10 @@ add_library(YieldPerDayDialog ${YieldPerDayDialog_SOURCES})
 target_compile_options(YieldPerDayDialog PUBLIC "-Wall")
 qt5_use_modules(YieldPerDayDialog Core Widgets)
 
+add_library(AboutDialog ${AboutDialog_SOURCES})
+target_compile_options(AboutDialog PUBLIC "-Wall")
+qt5_use_modules(AboutDialog Core Widgets)
+
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME}
 		MainWindow
@@ -175,6 +203,7 @@ target_link_libraries(${PROJECT_NAME}
 		PipeFlowCalcDialog
 		AreaFlowCalcDialog
 		YieldPerDayDialog
+		AboutDialog
 )
 target_compile_options(${PROJECT_NAME} PUBLIC "-Wall")
 

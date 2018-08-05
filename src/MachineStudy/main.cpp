@@ -23,13 +23,40 @@
 ****************************************************************************/
 
 #include "MainWindow.h"
+#include "version.h"
+
 #include <QApplication>
+
+#ifdef Q_OS_WIN
+// Needed to call CreateMutex to lockout installer running while we are:
+#include <windows.h>
+#endif
 
 QPointer<CMainWindow> g_pMyMainWindow = nullptr;
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
+	a.setApplicationVersion(VER_QT);
+	a.setApplicationName(VER_APPNAME_STR_QT);
+	a.setOrganizationName(VER_ORGNAME_STR_QT);
+	a.setOrganizationDomain(VER_ORGDOMAIN_STR_QT);
+
+	Q_INIT_RESOURCE(MachineStudy);
+
+#ifdef Q_OS_WIN32
+	a.setWindowIcon(QIcon(":/res/mmcms2.ico"));
+#elif !defined(Q_OS_MAC)	// Normally, this would also include Mac, but Mac has its icon set in the project file.  Loading this one makes it fuzzy.
+	a.setWindowIcon(QIcon(":/res/mmc2.png"));
+#endif
+
+#ifdef Q_OS_WIN
+	HANDLE hMutex = CreateMutexW(NULL, false, L"MachineStudyMutex");
+	assert(hMutex != NULL);
+	// Note: System will automatically close the mutex object when we
+	//	exit and InnoSetup actually suggest we leave it open
+#endif
+
 	CMainWindow w;
 	g_pMyMainWindow = &w;
 	w.show();

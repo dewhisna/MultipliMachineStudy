@@ -1,6 +1,4 @@
-<RCC>
-<!--
-****************************************************************************
+/****************************************************************************
 **
 ** Multipli Machine Study Application
 ** Copyright (C) 2018 Multipli Machinery, Corp.
@@ -22,19 +20,27 @@
 ** conditions contained in a signed written agreement between you and
 ** Multipli Machinery Corp.
 **
-****************************************************************************
--->
-	<qresource prefix="/">
-		<file>res/file-new-icon2.png</file>
-		<file>res/open-file-icon3.png</file>
-		<file>res/save-file-icon3.png</file>
-		<file>res/printer1.png</file>
-		<file>res/exit.png</file>
-		<file>res/arrow-left.png</file>
-		<file>res/arrow-up.png</file>
-		<file>res/arrow-right.png</file>
-		<file>res/arrow-down.png</file>
-		<file>res/mmc2.png</file>
-		<file>res/mmcms2.ico</file>
-	</qresource>
-</RCC>
+****************************************************************************/
+
+#include "AboutDialog.h"
+#include "ui_AboutDialog.h"
+
+#include <QApplication>
+
+// =============================================================================
+
+CAboutDialog::CAboutDialog(QWidget *parent) :
+	QDialog(parent),
+	ui(new Ui::CAboutDialog)
+{
+	ui->setupUi(this);
+
+	ui->lblProgramName->setText(ui->lblProgramName->text() + QApplication::applicationVersion());
+}
+
+CAboutDialog::~CAboutDialog()
+{
+	delete ui;
+}
+
+// =============================================================================

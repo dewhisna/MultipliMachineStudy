@@ -45,6 +45,7 @@
 #include "GradeCalcDialog.h"
 #include "HeadBoxDilutionDialog.h"
 #include "FormConstDialog.h"
+#include "AboutDialog.h"
 
 // =============================================================================
 
@@ -754,6 +755,8 @@ void CMainWindow::en_HelpHelp()
 
 void CMainWindow::en_HelpAbout()
 {
+	CAboutDialog dlgAbout(this);
+	dlgAbout.exec();
 }
 
 // -------------------------------------
