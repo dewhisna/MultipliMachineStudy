@@ -366,11 +366,12 @@ void CFormationCalcDialog::accept()
 	double nYieldPerDay = 0.0;
 	double nConsistency = 0.0;
 	int nNumberOfVats = 0;
+	bool bAutoCalc = (ui->checkBoxAutoCalc->isChecked());
 
-	if (!validateCaliper(&nCaliper, true)) return;
-	if (!validateDensity(&nDensity, true)) return;
-	if (!validateSheetWidth(&nSheetWidth, true)) return;
-	if (!validateFormConst(&nFormConst, true)) return;
+	if (!validateCaliper(&nCaliper, bAutoCalc) && bAutoCalc) return;
+	if (!validateDensity(&nDensity, bAutoCalc) && bAutoCalc) return;
+	if (!validateSheetWidth(&nSheetWidth, bAutoCalc) && bAutoCalc) return;
+	if (!validateFormConst(&nFormConst, bAutoCalc) && bAutoCalc) return;
 	if (!validateYieldPerDay(&nYieldPerDay, true)) return;
 	if (!validateConsistency(&nConsistency, true)) return;
 	if (!validateNumberOfVats(&nNumberOfVats, true)) return;
@@ -413,18 +414,19 @@ bool CFormationCalcDialog::calc1(bool bPrompt)
 	double nYieldPerDay = 0.0;
 	double nMachineSpeed = 0.0;
 	int nNumberOfVats = 0;
+	bool bAutoCalc = (ui->checkBoxAutoCalc->isChecked());
 
-	if ((!validateCaliper(&nCaliper, bPrompt)) ||
-		(!validateDensity(&nDensity, bPrompt))) {
+	if ((!validateCaliper(&nCaliper, bPrompt && bAutoCalc)) ||
+		(!validateDensity(&nDensity, bPrompt && bAutoCalc))) {
 		ui->editBasisWeight->setText(QString());
-		return false;
+		if (bAutoCalc) return false;
 	} else {
 		nBasisWeight = nCaliper * nDensity;
 		ui->editBasisWeight->setText(QString().setNum(m_bMetric ? toMetric(nBasisWeight, BasisWeightConv) : nBasisWeight));
 	}
 	m_DialogValues.m_nBasisWeight = nBasisWeight;
 
-	if (ui->checkBoxAutoCalc->isChecked()) {
+	if (bAutoCalc) {
 		if ((!validateSheetWidth(&nSheetWidth, bPrompt)) ||
 			(!validateFormConst(&nFormConst, bPrompt)) ||
 			(!validateNumberOfVats(&nNumberOfVats, bPrompt)) ||
@@ -435,22 +437,25 @@ bool CFormationCalcDialog::calc1(bool bPrompt)
 		} else {
 			nYieldPerDay = (nSheetWidth*nNumberOfVats)*nFormConst*m_DialogValues.m_nMachineEfficiency;
 			ui->editYieldPerDay->setText(QString().setNum(m_bMetric ? toMetric(nYieldPerDay, YieldPerDayConv) : nYieldPerDay));
-
-			nMachineSpeed = ((nYieldPerDay/hours_per_day)/min_per_hour)*lbs_per_ton;			// Find lbs per min
-			nMachineSpeed = (nMachineSpeed/nBasisWeight)*(1000.0/(nSheetWidth/in_per_ft));		// Find ft per min
-			nMachineSpeed = nMachineSpeed/m_DialogValues.m_nMachineEfficiency;
-			ui->editMachineSpeed->setText(QString().setNum(m_bMetric ? toMetric(nMachineSpeed, MachineSpeedConv) : nMachineSpeed));
+			// Don't set m_DialogValues.m_nYieldPerDay here since it's an edit box that will get returned in accept()
 		}
-		// Don't set m_DialogValues.m_nYieldPerDay here since it's an edit box that will get returned in accept()
-		m_DialogValues.m_nMachineSpeed = nMachineSpeed;
-
-		return true;
 	} else {
-		return (validateSheetWidth(&nSheetWidth, false) &&
-				validateFormConst(&nFormConst, false) &&
-				validateNumberOfVats(&nNumberOfVats, false) &&
-				(m_DialogValues.m_nMachineEfficiency > 0.0));
+		if ((!validateSheetWidth(&nSheetWidth, bPrompt)) ||
+			(nBasisWeight <= 0.0) ||
+			(!validateYieldPerDay(&nYieldPerDay, bPrompt)) ||
+			(m_DialogValues.m_nMachineEfficiency <= 0.0)) {
+			ui->editMachineSpeed->setText(QString());
+			return false;
+		}
 	}
+
+	nMachineSpeed = ((nYieldPerDay/hours_per_day)/min_per_hour)*lbs_per_ton;			// Find lbs per min
+	nMachineSpeed = (nMachineSpeed/nBasisWeight)*(1000.0/(nSheetWidth/in_per_ft));		// Find ft per min
+	nMachineSpeed = nMachineSpeed/m_DialogValues.m_nMachineEfficiency;
+	ui->editMachineSpeed->setText(QString().setNum(m_bMetric ? toMetric(nMachineSpeed, MachineSpeedConv) : nMachineSpeed));
+	m_DialogValues.m_nMachineSpeed = nMachineSpeed;
+
+	return true;
 }
 
 bool CFormationCalcDialog::calc2(bool bPrompt)
@@ -636,42 +641,53 @@ void CFormationCalcDialog::doProductionCalc()
 
 void CFormationCalcDialog::en_changeCaliper()
 {
-	calc1(false);			// Triggers Save/Apply update via YieldPerDay change
+	bool bCalc1 = calc1(false);
+	m_pSaveApplyButton->setEnabled(calc2(false) && bCalc1);		// Reverse short-circuiting so that we call both calc functions
 }
 
 void CFormationCalcDialog::en_changeDensity()
 {
-	calc1(false);			// Triggers Save/Apply update via YieldPerDay change
+	bool bCalc1 = calc1(false);
+	m_pSaveApplyButton->setEnabled(calc2(false) && bCalc1);		// Reverse short-circuiting so that we call both calc functions
 }
 
 void CFormationCalcDialog::en_changeSheetWidth()
 {
-	ui->btnCalcVats->setEnabled(calc1(false));			// Triggers Save/Apply update via YieldPerDay change
+	bool bCalc1 = calc1(false);
+	ui->btnCalcVats->setEnabled(bCalc1);
+	m_pSaveApplyButton->setEnabled(calc2(false) && bCalc1);		// Reverse short-circuiting so that we call both calc functions
 }
 
 void CFormationCalcDialog::en_changeFormConst()
 {
-	ui->btnCalcVats->setEnabled(calc1(false));			// Triggers Save/Apply update via YieldPerDay change
+	bool bCalc1 = calc1(false);
+	ui->btnCalcVats->setEnabled(bCalc1);
+	m_pSaveApplyButton->setEnabled(calc2(false) && bCalc1);		// Reverse short-circuiting so that we call both calc functions
 }
 
 void CFormationCalcDialog::en_changeYieldPerDay()
 {
-	m_pSaveApplyButton->setEnabled(calc2(false));
+	bool bCalc1 = calc1(false);
+	m_pSaveApplyButton->setEnabled(calc2(false) && bCalc1);		// Reverse short-circuiting so that we call both calc functions
 }
 
 void CFormationCalcDialog::en_changeConsistency()
 {
-	m_pSaveApplyButton->setEnabled(calc2(false));
+	bool bCalc1 = calc1(false);
+	m_pSaveApplyButton->setEnabled(calc2(false) && bCalc1);		// Reverse short-circuiting so that we call both calc functions
 }
 
 void CFormationCalcDialog::en_changeNumberOfVats()
 {
-	calc1(false);			// Triggers Save/Apply update and calc2 via YieldPerDay change
+	bool bCalc1 = calc1(false);
+	m_pSaveApplyButton->setEnabled(calc2(false) && bCalc1);		// Reverse short-circuiting so that we call both calc functions
 }
 
 void CFormationCalcDialog::en_changeMachineEfficiency()
 {
-	ui->btnCalcVats->setEnabled(calc1(false));			// Triggers Save/Apply update and calc2 via YieldPerDay change
+	bool bCalc1 = calc1(false);
+	ui->btnCalcVats->setEnabled(bCalc1);
+	m_pSaveApplyButton->setEnabled(calc2(false) && bCalc1);		// Reverse short-circuiting so that we call both calc functions
 }
 
 void CFormationCalcDialog::en_changeCylinderBoardType()
@@ -718,9 +734,15 @@ void CFormationCalcDialog::en_changeCylinderBoardType()
 
 void CFormationCalcDialog::en_changeAutoCalc()
 {
-	if (ui->checkBoxAutoCalc->isChecked()) {
-		calc1(false);		// Auto-triggers calc2 if needed
-	}
+	bool bAutoCalc = (ui->checkBoxAutoCalc->isChecked());
+
+	m_DialogValues.m_bAutoCalc = bAutoCalc;
+	bool bCalc1 = calc1(false);
+	m_pSaveApplyButton->setEnabled(calc2(false) && bCalc1);		// Reverse short-circuiting so that we call both calc functions
+	ui->editYieldPerDay->setReadOnly(bAutoCalc);
+	QPalette pal = ui->editYieldPerDay->palette();
+	pal.setColor(QPalette::Base, bAutoCalc ? m_clrEditDisabled : m_clrEditEnabled);
+	ui->editYieldPerDay->setPalette(pal);
 }
 
 // =============================================================================

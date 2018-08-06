@@ -403,38 +403,42 @@ void CMainWindow::en_FormationSheetFormation()
 		ui->editMainText->append(strTemp);
 		ui->editMainText->append(QString());
 
+		strTemp = "Caliper (points): ";
+		if (m_bMetric) {
+			strTemp += QString().setNum(toMetric(dlgForm.m_DialogValues.m_nCaliper, CaliperConv));
+		} else {
+			strTemp += QString().setNum(dlgForm.m_DialogValues.m_nCaliper);
+		}
+		ui->editMainText->append(strTemp);
+		if (m_bMetric) {
+			strTemp = "Sheet Density (grams/point): ";
+			strTemp += QString().setNum(toMetric(dlgForm.m_DialogValues.m_nDensity, DensityConv));
+		} else {
+			strTemp = "Sheet Density (lbs/point): ";
+			strTemp += QString().setNum(dlgForm.m_DialogValues.m_nDensity);
+		}
+		ui->editMainText->append(strTemp);
+		if (m_bMetric) {
+			strTemp = "Basis Weight (grams/M Sq): ";
+			strTemp += QString().setNum(toMetric(dlgForm.m_DialogValues.m_nBasisWeight, BasisWeightConv));
+		} else {
+			strTemp = "Basis Weight (lbs/1K Sq. Ft): ";
+			strTemp += QString().setNum(dlgForm.m_DialogValues.m_nBasisWeight);
+		}
+		ui->editMainText->append(strTemp);
+		ui->editMainText->append(QString());
+
+		if (m_bMetric) {
+			strTemp = "Sheet Trim Width (mm): ";
+			strTemp += QString().setNum(toMetric(dlgForm.m_DialogValues.m_nSheetWidth, SheetWidthConv));
+		} else {
+			strTemp = "Sheet Trim Width (in.): ";
+			strTemp += QString().setNum(dlgForm.m_DialogValues.m_nSheetWidth);
+		}
+		ui->editMainText->append(strTemp);
+		ui->editMainText->append(QString());
+
 		if (dlgForm.m_DialogValues.m_bAutoCalc) {
-			strTemp = "Caliper (points): ";
-			if (m_bMetric) {
-				strTemp += QString().setNum(toMetric(dlgForm.m_DialogValues.m_nCaliper, CaliperConv));
-			} else {
-				strTemp += QString().setNum(dlgForm.m_DialogValues.m_nCaliper);
-			}
-			ui->editMainText->append(strTemp);
-			if (m_bMetric) {
-				strTemp = "Sheet Density (grams/point): ";
-				strTemp += QString().setNum(toMetric(dlgForm.m_DialogValues.m_nDensity, DensityConv));
-			} else {
-				strTemp = "Sheet Density (lbs/point): ";
-				strTemp += QString().setNum(dlgForm.m_DialogValues.m_nDensity);
-			}
-			ui->editMainText->append(strTemp);
-			if (m_bMetric) {
-				strTemp = "Basis Weight (grams/M Sq): ";
-				strTemp += QString().setNum(toMetric(dlgForm.m_DialogValues.m_nBasisWeight, BasisWeightConv));
-			} else {
-				strTemp = "Basis Weight (lbs/1K Sq. Ft): ";
-				strTemp += QString().setNum(dlgForm.m_DialogValues.m_nBasisWeight);
-			}
-			ui->editMainText->append(strTemp);
-			if (m_bMetric) {
-				strTemp = "Sheet Trim Width (mm): ";
-				strTemp += QString().setNum(toMetric(dlgForm.m_DialogValues.m_nSheetWidth, SheetWidthConv));
-			} else {
-				strTemp = "Sheet Trim Width (in.): ";
-				strTemp += QString().setNum(dlgForm.m_DialogValues.m_nSheetWidth);
-			}
-			ui->editMainText->append(strTemp);
 			if (m_bMetric) {
 				strTemp = "Formation Constant (kilograms/mm of Cylinder): ";
 				strTemp += QString().setNum(toMetric(dlgForm.m_DialogValues.m_nFormConst, FormConv));
