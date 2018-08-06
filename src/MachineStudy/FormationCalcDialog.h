@@ -99,6 +99,7 @@ public slots:
 protected slots:
 	bool calc1(bool bPrompt = true);	// Called on change of Caliper/Density/SheetWidth/FormConst/NumVats/MachEff -> Calcs BasisWeight/YieldPerDay/MachineSpeed
 	bool calc2(bool bPrompt = true);	// Called on change of YieldPerDay/Consistency/NumVats/MachEff -> Calcs WaterNeeded/WaterNeededPerVat/NumVats?
+	bool doVatsCalcValid();
 
 	void doGrade();
 	void doFormConstOtherCalc();

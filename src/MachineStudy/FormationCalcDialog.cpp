@@ -489,6 +489,21 @@ bool CFormationCalcDialog::calc2(bool bPrompt)
 	return true;
 }
 
+bool CFormationCalcDialog::doVatsCalcValid()
+{
+	double nSheetWidth = 0.0;
+	double nFormConst = 0.0;
+	double nYieldPerDay = 0.0;
+
+	if ((!validateSheetWidth(&nSheetWidth, false)) ||
+		(!validateFormConst(&nFormConst, false)) ||
+		(!validateYieldPerDay(&nYieldPerDay, false)) ||
+		(m_DialogValues.m_nMachineEfficiency <= 0.0)) {
+		return false;
+	}
+	return true;
+}
+
 void CFormationCalcDialog::doGrade()
 {
 	CGradeCalcDialog dlgGrade(false, m_bMetric, this);
@@ -653,15 +668,15 @@ void CFormationCalcDialog::en_changeDensity()
 
 void CFormationCalcDialog::en_changeSheetWidth()
 {
+	ui->btnCalcVats->setEnabled(doVatsCalcValid());
 	bool bCalc1 = calc1(false);
-	ui->btnCalcVats->setEnabled(bCalc1);
 	m_pSaveApplyButton->setEnabled(calc2(false) && bCalc1);		// Reverse short-circuiting so that we call both calc functions
 }
 
 void CFormationCalcDialog::en_changeFormConst()
 {
+	ui->btnCalcVats->setEnabled(doVatsCalcValid());
 	bool bCalc1 = calc1(false);
-	ui->btnCalcVats->setEnabled(bCalc1);
 	m_pSaveApplyButton->setEnabled(calc2(false) && bCalc1);		// Reverse short-circuiting so that we call both calc functions
 }
 
@@ -685,8 +700,8 @@ void CFormationCalcDialog::en_changeNumberOfVats()
 
 void CFormationCalcDialog::en_changeMachineEfficiency()
 {
+	ui->btnCalcVats->setEnabled(doVatsCalcValid());
 	bool bCalc1 = calc1(false);
-	ui->btnCalcVats->setEnabled(bCalc1);
 	m_pSaveApplyButton->setEnabled(calc2(false) && bCalc1);		// Reverse short-circuiting so that we call both calc functions
 }
 
