@@ -20,7 +20,7 @@ WARNING=1  ; If you remove this line, then HC will report the following
 machstdy.rtf  ; main topics
 
 [BITMAPS]
-MMC1.BMP
+mmc1.bmp
 
 [MAP]
 #include <helpids.h>
