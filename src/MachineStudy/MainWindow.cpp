@@ -47,6 +47,9 @@
 #include "FormConstDialog.h"
 #include "AboutDialog.h"
 
+#include <finddialog.h>
+#include <findreplacedialog.h>
+
 // =============================================================================
 
 static QSharedPointer<QPrinter> g_pPrinter;
@@ -57,6 +60,8 @@ CMainWindow::CMainWindow(QWidget *parent) :
 	m_bHaveTextOutput(false),
 	m_bDirty(false),
 	m_pMetricAction(nullptr),
+	m_pFindDialog(nullptr),
+	m_pFindReplaceDialog(nullptr),
 	ui(new Ui::CMainWindow)
 {
 	ui->setupUi(this);
@@ -191,6 +196,14 @@ CMainWindow::CMainWindow(QWidget *parent) :
 	pAction->setToolTip(tr("Details About Multipli Machine Study"));
 
 	connect(ui->editMainText, SIGNAL(textChanged()), this, SLOT(en_TextChanged()));
+
+	m_pFindDialog = new FindDialog(this);
+	m_pFindDialog->setModal(false);
+	m_pFindDialog->setTextEdit(ui->editMainText);
+
+	m_pFindReplaceDialog = new FindReplaceDialog(this);
+	m_pFindReplaceDialog->setModal(false);
+	m_pFindReplaceDialog->setTextEdit(ui->editMainText);
 }
 
 CMainWindow::~CMainWindow()
@@ -329,10 +342,24 @@ void CMainWindow::en_quit()
 
 void CMainWindow::en_Search()
 {
+	if (m_pFindDialog) {
+		if (m_pFindDialog->isVisible()) {
+			m_pFindDialog->activateWindow();
+		} else {
+			m_pFindDialog->show();
+		}
+	}
 }
 
 void CMainWindow::en_SearchReplace()
 {
+	if (m_pFindReplaceDialog) {
+		if (m_pFindReplaceDialog->isVisible()) {
+			m_pFindReplaceDialog->activateWindow();
+		} else {
+			m_pFindReplaceDialog->show();
+		}
+	}
 }
 
 // -------------------------------------

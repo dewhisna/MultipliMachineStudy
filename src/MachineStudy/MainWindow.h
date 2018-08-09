@@ -36,6 +36,8 @@
 
 // Forward declarations:
 class QPrinter;
+class FindDialog;
+class FindReplaceDialog;
 
 namespace Ui {
 	class CMainWindow;
@@ -106,6 +108,8 @@ private:
 	QString m_strLastDirectory;
 	QAction *m_pMetricAction;
 	QString m_strMainWindowTitle;
+	FindDialog *m_pFindDialog;
+	FindReplaceDialog *m_pFindReplaceDialog;
 	Ui::CMainWindow *ui;
 };
 

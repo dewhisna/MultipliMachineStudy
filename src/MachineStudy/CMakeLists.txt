@@ -144,12 +144,12 @@ set(AboutDialog_SOURCES
 	"AboutDialog.ui"
 )
 
-#include_directories(
-#)
+add_subdirectory(../QtFindReplaceDialog/dialogs QtFindReplaceDialog)
 
 add_library(MainWindow ${MainWindow_SOURCES})
 target_compile_options(MainWindow PUBLIC "-Wall")
 qt5_use_modules(MainWindow Core Widgets PrintSupport)
+target_link_libraries(MainWindow QtFindReplaceDialog)
 
 add_library(CustomerDialog ${CustomerDialog_SOURCES})
 target_compile_options(CustomerDialog PUBLIC "-Wall")

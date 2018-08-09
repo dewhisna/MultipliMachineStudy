@@ -1,0 +1,3 @@
+[submodule "src/QtFindReplaceDialog"]
+	path = src/QtFindReplaceDialog
+	url = https://github.com/dewhisna/QtFindReplaceDialog.git
