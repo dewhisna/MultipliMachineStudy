@@ -381,6 +381,14 @@ void CMainWindow::en_SetupMetric()
 	emit metricModeSelected(m_bMetric);
 }
 
+void CMainWindow::en_changeMetric(bool bMetric)
+{
+	assert(m_pMetricAction != nullptr);
+	m_bMetric = bMetric;
+	m_pMetricAction->setChecked(bMetric);
+	emit metricModeSelected(bMetric);
+}
+
 // -------------------------------------
 
 void CMainWindow::TextOutputStart(bool bSkipCustomer, bool bSkipAppend)
@@ -426,6 +434,8 @@ void CMainWindow::en_FormationSheetFormation()
 	static CFormationCalcDialog::TDialogValues persistentValues;
 	CFormationCalcDialog dlgForm(true, m_bMetric, this);
 	dlgForm.m_DialogValues = persistentValues;
+	connect(&dlgForm, SIGNAL(metricModeSelected(bool)), this, SLOT(en_changeMetric(bool)));
+	connect(this, SIGNAL(metricModeSelected(bool)), &dlgForm, SLOT(setMetric(bool)));		// Prepare for modeless dialog in case of future change
 	int nResult = dlgForm.exec();
 	persistentValues = dlgForm.m_DialogValues;
 	if (nResult == QDialog::Accepted) {

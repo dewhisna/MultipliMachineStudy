@@ -91,12 +91,17 @@ public:
 		double m_nMachineEfficiency;	// Normalized Percentage (unitless) 0.0 - 1.0
 	} m_DialogValues;			// Values to set coming in or final values (after validation) going out
 
+signals:
+	void metricModeSelected(bool bMetric);		// Option toggle
+
 public slots:
 	void setMetric(bool bMetric);
 
 	virtual int exec() override;
 
 protected slots:
+	void saveValues();
+	void setValues();
 	bool calc1(bool bPrompt = true);	// Called on change of Caliper/Density/SheetWidth/FormConst/NumVats/MachEff -> Calcs BasisWeight/YieldPerDay/MachineSpeed
 	bool calc2(bool bPrompt = true);	// Called on change of YieldPerDay/Consistency/NumVats/MachEff -> Calcs WaterNeeded/WaterNeededPerVat/NumVats?
 	bool doVatsCalcValid();
@@ -140,6 +145,7 @@ protected:
 private:
 	bool m_bStandAlone;
 	bool m_bMetric;
+	bool m_bChangingMetricMode;
 	bool m_bCylinderBoardTypeUpdateInProgress;	// True if currently updating the radio buttons, so calculations can be done only once
 	QColor m_clrEditEnabled;
 	QColor m_clrEditDisabled;

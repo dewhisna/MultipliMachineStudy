@@ -52,7 +52,7 @@ public:
 	~CMainWindow();
 
 signals:
-	void metricModeSelected(bool bMetric);
+	void metricModeSelected(bool bMetric);		// Inbound or menu option toggle
 
 protected slots:
 	// --- File Menu
@@ -70,7 +70,8 @@ protected slots:
 	void en_SearchReplace();
 
 	// --- Setup Menu
-	void en_SetupMetric();
+	void en_SetupMetric();						// Menu option toggle
+	void en_changeMetric(bool bMetric);			// Inbound option toggle (from subdialogs)
 
 	// --- Formation Menu
 	void en_FormationSheetFormation();

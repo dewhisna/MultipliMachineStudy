@@ -65,6 +65,7 @@ CFormationCalcDialog::CFormationCalcDialog(bool bStandAlone, bool bMetric, QWidg
 	QDialog(parent),
 	m_bStandAlone(bStandAlone),
 	m_bMetric(bMetric),
+	m_bChangingMetricMode(false),
 	m_bCylinderBoardTypeUpdateInProgress(false),
 	m_pSaveApplyButton(nullptr),
 	ui(new Ui::CFormationCalcDialog)
@@ -86,6 +87,9 @@ CFormationCalcDialog::CFormationCalcDialog(bool bStandAlone, bool bMetric, QWidg
 
 	m_pSaveApplyButton = bStandAlone ? pSaveButton : pApplyButton;
 	connect(m_pSaveApplyButton, SIGNAL(clicked(bool)), this, SLOT(accept()));
+
+	ui->checkMetric->setChecked(bMetric);
+	connect(ui->checkMetric, SIGNAL(toggled(bool)), this, SLOT(setMetric(bool)));
 
 	m_clrEditEnabled = ui->editFormConst->palette().color(QPalette::Base);
 	m_clrEditDisabled = ui->editFormConst->palette().color(QPalette::AlternateBase);
@@ -157,8 +161,14 @@ void CFormationCalcDialog::setUIText()
 
 void CFormationCalcDialog::setMetric(bool bMetric)
 {
+	if (m_bChangingMetricMode) return;
+	saveValues();
 	m_bMetric = bMetric;
+	setValues();
 	setUIText();
+	m_bChangingMetricMode = true;
+	emit metricModeSelected(bMetric);
+	m_bChangingMetricMode = false;
 }
 
 void CFormationCalcDialog::setCylinderBoardType(CYLINDER_SIZE_ENUM nCSE, BOARD_TYPE_ENUM nBTE, bool bOtherForm)
@@ -339,18 +349,7 @@ int CFormationCalcDialog::exec()
 	// Set AutoCalc flag before values so we'll do AutoCalc while setting values:
 	ui->checkBoxAutoCalc->setChecked(m_DialogValues.m_bAutoCalc);
 
-	ui->editCaliper->setText(QString().setNum(m_bMetric ? toMetric(m_DialogValues.m_nCaliper, CaliperConv) : m_DialogValues.m_nCaliper));
-	ui->editDensity->setText(QString().setNum(m_bMetric ? toMetric(m_DialogValues.m_nDensity, DensityConv) : m_DialogValues.m_nDensity));
-	ui->editSheetWidth->setText(QString().setNum(m_bMetric ? toMetric(m_DialogValues.m_nSheetWidth, SheetWidthConv) : m_DialogValues.m_nSheetWidth));
-	ui->editFormConst->setText(QString().setNum(m_bMetric ? toMetric(m_DialogValues.m_nFormConst, FormConv) : m_DialogValues.m_nFormConst));
-	ui->editYieldPerDay->setText(QString().setNum(m_bMetric ? toMetric(m_DialogValues.m_nYieldPerDay, YieldPerDayConv) : m_DialogValues.m_nYieldPerDay));
-	ui->editConsistency->setText(QString().setNum(m_DialogValues.m_nConsistency * 100.0));
-	ui->editNumberOfVats->setText(QString().setNum(m_DialogValues.m_nNumberOfVats));
-	ui->editMachineSpeed->setText(QString().setNum(m_bMetric ? toMetric(m_DialogValues.m_nMachineSpeed, MachineSpeedConv) : m_DialogValues.m_nMachineSpeed));
-	ui->editMachineEfficiency->setText(QString().setNum(m_DialogValues.m_nMachineEfficiency * 100.0));
-	setCylinderBoardType(m_DialogValues.m_nCylinderSize, m_DialogValues.m_nBoardType, m_DialogValues.m_bOtherFormConst);
-	calc1(false);
-	calc2(false);
+	setValues();
 
 	ui->editCaliper->setFocus();
 
@@ -390,6 +389,12 @@ void CFormationCalcDialog::accept()
 
 void CFormationCalcDialog::reject()
 {
+	saveValues();
+	QDialog::reject();
+}
+
+void CFormationCalcDialog::saveValues()
+{
 	validateCaliper(&m_DialogValues.m_nCaliper, false);
 	validateDensity(&m_DialogValues.m_nDensity, false);
 	validateSheetWidth(&m_DialogValues.m_nSheetWidth, false);
@@ -399,7 +404,22 @@ void CFormationCalcDialog::reject()
 	validateNumberOfVats(&m_DialogValues.m_nNumberOfVats, false);
 	calc1(false);
 	calc2(false);
-	QDialog::reject();
+}
+
+void CFormationCalcDialog::setValues()
+{
+	ui->editCaliper->setText(QString().setNum(m_bMetric ? toMetric(m_DialogValues.m_nCaliper, CaliperConv) : m_DialogValues.m_nCaliper));
+	ui->editDensity->setText(QString().setNum(m_bMetric ? toMetric(m_DialogValues.m_nDensity, DensityConv) : m_DialogValues.m_nDensity));
+	ui->editSheetWidth->setText(QString().setNum(m_bMetric ? toMetric(m_DialogValues.m_nSheetWidth, SheetWidthConv) : m_DialogValues.m_nSheetWidth));
+	ui->editFormConst->setText(QString().setNum(m_bMetric ? toMetric(m_DialogValues.m_nFormConst, FormConv) : m_DialogValues.m_nFormConst));
+	ui->editYieldPerDay->setText(QString().setNum(m_bMetric ? toMetric(m_DialogValues.m_nYieldPerDay, YieldPerDayConv) : m_DialogValues.m_nYieldPerDay));
+	ui->editConsistency->setText(QString().setNum(m_DialogValues.m_nConsistency * 100.0));
+	ui->editNumberOfVats->setText(QString().setNum(m_DialogValues.m_nNumberOfVats));
+	ui->editMachineSpeed->setText(QString().setNum(m_bMetric ? toMetric(m_DialogValues.m_nMachineSpeed, MachineSpeedConv) : m_DialogValues.m_nMachineSpeed));
+	ui->editMachineEfficiency->setText(QString().setNum(m_DialogValues.m_nMachineEfficiency * 100.0));
+	setCylinderBoardType(m_DialogValues.m_nCylinderSize, m_DialogValues.m_nBoardType, m_DialogValues.m_bOtherFormConst);
+	calc1(false);
+	calc2(false);
 }
 
 // -----------------------------------------------------------------------------
