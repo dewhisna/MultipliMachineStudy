@@ -195,6 +195,15 @@ CMainWindow::CMainWindow(QWidget *parent) :
 	pAction->setStatusTip(tr("Details About Multipli Machine Study"));
 	pAction->setToolTip(tr("Details About Multipli Machine Study"));
 
+	// --- Toolbar Special
+	ui->mainToolBar->addSeparator();
+	QPushButton *pButtonFormation = new QPushButton(tr("Formation", "MainMenu"), this);
+	pButtonFormation->setStatusTip(tr("Calculate Sheet Formation"));
+	pButtonFormation->setToolTip(tr("Calculate Sheet Formation"));
+	pButtonFormation->setStyleSheet("background-color: green; color: white");
+	pAction = ui->mainToolBar->addWidget(pButtonFormation);
+	connect(pButtonFormation, SIGNAL(clicked(bool)), this, SLOT(en_FormationSheetFormation()));
+
 	connect(ui->editMainText, SIGNAL(textChanged()), this, SLOT(en_TextChanged()));
 
 	m_pFindDialog = new FindDialog(this);
