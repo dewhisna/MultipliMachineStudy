@@ -110,8 +110,8 @@ private:
 	QString m_strLastDirectory;
 	QAction *m_pMetricAction;
 	QString m_strMainWindowTitle;
-	FindDialog *m_pFindDialog;
-	FindReplaceDialog *m_pFindReplaceDialog;
+	QPointer<FindDialog> m_pFindDialog;
+	QPointer<FindReplaceDialog> m_pFindReplaceDialog;
 	QPointer<CHelpDialog> m_pHelpDialog;
 	Ui::CMainWindow *ui;
 };
