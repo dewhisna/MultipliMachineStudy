@@ -184,7 +184,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
 
 	// --- Help Menu
 	QMenu *pHelpMenu = ui->menuBar->addMenu(tr("&Help", "MainMenu"));
-	pAction = pHelpMenu->addAction(tr("&Help", "MainMenu"), this, SLOT(en_HelpHelp()));
+	pAction = pHelpMenu->addAction(tr("&Help", "MainMenu"), this, SLOT(en_HelpHelp()), QKeySequence(Qt::Key_F1));
 	pAction->setStatusTip(tr("Display Help Documentation"));
 	pAction->setToolTip(tr("Display Help Documentation"));
 	pAction = pHelpMenu->addAction(tr("About &Qt", "MainMenu"), QApplication::instance(), SLOT(aboutQt()));
@@ -799,7 +799,7 @@ void CMainWindow::en_FlowArea()
 void CMainWindow::en_HelpHelp()
 {
 	if (m_pHelpDialog.isNull()) {
-		m_pHelpDialog = new CHelpDialog(this);
+		m_pHelpDialog = new CHelpDialog();
 	}
 	m_pHelpDialog->show();
 }
