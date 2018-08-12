@@ -144,6 +144,14 @@ set(AboutDialog_SOURCES
 	"AboutDialog.ui"
 )
 
+set(HelpDialog_SOURCES
+	"HelpDialog.cpp"
+	"HelpDialog.h"
+	"HelpDialog.ui"
+	"HelpBrowser.cpp"
+	"HelpBrowser.h"
+)
+
 add_subdirectory(../QtFindReplaceDialog/dialogs QtFindReplaceDialog)
 
 add_library(MainWindow ${MainWindow_SOURCES})
@@ -191,6 +199,10 @@ add_library(AboutDialog ${AboutDialog_SOURCES})
 target_compile_options(AboutDialog PUBLIC "-Wall")
 qt5_use_modules(AboutDialog Core Widgets)
 
+add_library(HelpDialog ${HelpDialog_SOURCES})
+target_compile_options(HelpDialog PUBLIC "-Wall")
+qt5_use_modules(HelpDialog Core Widgets Help)
+
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME}
 		MainWindow
@@ -204,6 +216,7 @@ target_link_libraries(${PROJECT_NAME}
 		AreaFlowCalcDialog
 		YieldPerDayDialog
 		AboutDialog
+		HelpDialog
 )
 target_compile_options(${PROJECT_NAME} PUBLIC "-Wall")
 

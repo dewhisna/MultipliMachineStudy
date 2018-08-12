@@ -38,6 +38,7 @@
 class QPrinter;
 class FindDialog;
 class FindReplaceDialog;
+class CHelpDialog;
 
 namespace Ui {
 	class CMainWindow;
@@ -111,6 +112,7 @@ private:
 	QString m_strMainWindowTitle;
 	FindDialog *m_pFindDialog;
 	FindReplaceDialog *m_pFindReplaceDialog;
+	QPointer<CHelpDialog> m_pHelpDialog;
 	Ui::CMainWindow *ui;
 };
 

@@ -46,6 +46,7 @@
 #include "HeadBoxDilutionDialog.h"
 #include "FormConstDialog.h"
 #include "AboutDialog.h"
+#include "HelpDialog.h"
 
 #include <finddialog.h>
 #include <findreplacedialog.h>
@@ -801,6 +802,10 @@ void CMainWindow::en_FlowArea()
 
 void CMainWindow::en_HelpHelp()
 {
+	if (m_pHelpDialog.isNull()) {
+		m_pHelpDialog = new CHelpDialog(this);
+	}
+	m_pHelpDialog->show();
 }
 
 void CMainWindow::en_HelpAbout()
