@@ -802,12 +802,19 @@ void CMainWindow::en_HelpHelp()
 		m_pHelpDialog = new CHelpDialog();
 	}
 	m_pHelpDialog->show();
+	m_pHelpDialog->raise();
 }
 
 void CMainWindow::en_HelpAbout()
 {
 	CAboutDialog dlgAbout(this);
 	dlgAbout.exec();
+}
+
+void CMainWindow::showHelp(const QString &strDocument)
+{
+	en_HelpHelp();
+	m_pHelpDialog->navigateTo(strDocument);
 }
 
 // -------------------------------------

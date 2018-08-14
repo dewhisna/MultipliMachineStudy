@@ -96,6 +96,7 @@ public slots:
 	void insertText(const QString &strText);
 	void insertFlowPipeText(const CPipeFlowCalcDialog::TDialogValues &values);
 	void insertFlowAreaText(const CAreaFlowCalcDialog::TDialogValues &values);
+	void showHelp(const QString &strDocument = QString());
 
 protected:
 	void TextOutputStart(bool bSkipCustomer = false, bool bSkipAppend = false);

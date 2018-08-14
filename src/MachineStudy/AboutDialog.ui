@@ -26,7 +26,7 @@
  <class>CAboutDialog</class>
  <widget class="QDialog" name="CAboutDialog">
   <property name="windowModality">
-   <enum>Qt::ApplicationModal</enum>
+   <enum>Qt::WindowModal</enum>
   </property>
   <property name="windowTitle">
    <string>About Machine Study</string>

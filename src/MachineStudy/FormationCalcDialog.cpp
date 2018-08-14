@@ -84,6 +84,10 @@ CFormationCalcDialog::CFormationCalcDialog(bool bStandAlone, bool bMetric, QWidg
 	if (pApplyButton) {
 		pApplyButton->setVisible(!bStandAlone);
 	}
+	QPushButton *pHelpButton = ui->buttonBox->button(QDialogButtonBox::Help);
+	if (pHelpButton) {
+		connect(pHelpButton, SIGNAL(clicked(bool)), g_pMyMainWindow.data(), SLOT(showHelp()));
+	}
 
 	m_pSaveApplyButton = bStandAlone ? pSaveButton : pApplyButton;
 	connect(m_pSaveApplyButton, SIGNAL(clicked(bool)), this, SLOT(accept()));

@@ -41,6 +41,9 @@ public:
 	explicit CHelpDialog(QWidget *parent = nullptr);
 	~CHelpDialog();
 
+public slots:
+	void navigateTo(const QString &strDocument = QString());
+
 private:
 	Ui::CHelpDialog *ui;
 };

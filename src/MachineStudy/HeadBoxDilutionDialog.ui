@@ -25,16 +25,14 @@
 ****************************************************************************</comment>
  <class>CHeadBoxDilutionDialog</class>
  <widget class="QDialog" name="CHeadBoxDilutionDialog">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>356</width>
-    <height>180</height>
-   </rect>
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
   </property>
   <property name="windowTitle">
    <string>Multipli Head Box Dilution</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

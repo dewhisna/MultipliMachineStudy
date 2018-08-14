@@ -30,6 +30,13 @@
 
 // =============================================================================
 
+namespace {
+	const QString &gconstrBaseHelpURL = "qthelp://com.multiplimachine.study/doc/html";
+	const QString &gconstMainHelpPage = "mach0wc8.htm";
+}
+
+// -----------------------------------------------------------------------------
+
 CHelpDialog::CHelpDialog(QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::CHelpDialog)
@@ -46,7 +53,7 @@ CHelpDialog::CHelpDialog(QWidget *parent) :
 //	ui->tabWidget->addTab(pHelpEngine->contentWidget(), tr("Contents"));
 	ui->tabWidget->addTab(pHelpEngine->indexWidget(), tr("Index"));
 
-	ui->helpBrowser->setSource(QUrl("qthelp://com.multiplimachine.study/doc/html/mach0wc8.htm"));
+	navigateTo();
 
 	connect(pHelpEngine->contentWidget(), SIGNAL(linkActivated(QUrl)), ui->helpBrowser, SLOT(setSource(QUrl)));
 	connect(pHelpEngine->indexWidget(), SIGNAL(linkActivated(QUrl,QString)), ui->helpBrowser, SLOT(setSource(QUrl)));
@@ -55,6 +62,11 @@ CHelpDialog::CHelpDialog(QWidget *parent) :
 CHelpDialog::~CHelpDialog()
 {
 	delete ui;
+}
+
+void CHelpDialog::navigateTo(const QString &strDocument)
+{
+	ui->helpBrowser->setSource(QUrl(gconstrBaseHelpURL + "/" + (strDocument.isEmpty() ? gconstMainHelpPage : strDocument)));
 }
 
 // =============================================================================

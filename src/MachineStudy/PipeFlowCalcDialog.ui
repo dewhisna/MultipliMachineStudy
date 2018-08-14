@@ -26,7 +26,7 @@
  <class>CPipeFlowCalcDialog</class>
  <widget class="QDialog" name="CPipeFlowCalcDialog">
   <property name="windowModality">
-   <enum>Qt::ApplicationModal</enum>
+   <enum>Qt::WindowModal</enum>
   </property>
   <property name="windowTitle">
    <string>Multipli Pipe Flow Calculations</string>

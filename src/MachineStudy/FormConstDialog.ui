@@ -26,7 +26,7 @@
  <class>CFormConstDialog</class>
  <widget class="QDialog" name="CFormConstDialog">
   <property name="windowModality">
-   <enum>Qt::ApplicationModal</enum>
+   <enum>Qt::WindowModal</enum>
   </property>
   <property name="windowTitle">
    <string>Multipli Board Type Formation Constant Calculation</string>

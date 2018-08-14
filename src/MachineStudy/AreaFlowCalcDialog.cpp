@@ -27,6 +27,8 @@
 
 #include "conversion.h"
 
+#include "MainWindow.h"
+
 #include <QPushButton>
 #include <QMessageBox>
 
@@ -52,6 +54,10 @@ CAreaFlowCalcDialog::CAreaFlowCalcDialog(bool bStandAlone, bool bMetric, QWidget
 	assert(pApplyButton != nullptr);
 	if (pApplyButton) {
 		pApplyButton->setVisible(!bStandAlone);
+	}
+	QPushButton *pHelpButton = ui->buttonBox->button(QDialogButtonBox::Help);
+	if (pHelpButton) {
+		connect(pHelpButton, SIGNAL(clicked(bool)), g_pMyMainWindow.data(), SLOT(showHelp()));
 	}
 
 	m_pSaveApplyButton = bStandAlone ? pSaveButton : pApplyButton;

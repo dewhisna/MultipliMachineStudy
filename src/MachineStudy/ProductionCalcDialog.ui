@@ -25,8 +25,14 @@
 ****************************************************************************</comment>
  <class>CProductionCalcDialog</class>
  <widget class="QDialog" name="CProductionCalcDialog">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="windowTitle">
    <string>Multipli Production Calculations</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
