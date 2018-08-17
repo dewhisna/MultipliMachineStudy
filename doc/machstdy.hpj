@@ -3,7 +3,7 @@ LOCKED                  ; "hidden" commands used for MMC Employees Only
 
 [OPTIONS]
 TITLE=Multipli Machine Study Program
-COPYRIGHT=Copyright(c)1994 Multipli Machinery
+COPYRIGHT=Copyright(c)2018 Multipli Machinery
 COMPRESS=true
 CONTENTS=main_index
 BUILD=LOCKED

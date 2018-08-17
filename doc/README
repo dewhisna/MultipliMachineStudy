@@ -1,0 +1,46 @@
+To create the Machine Study Help, do the following:
+
+- Install Microsoft HTML Help Workshop/Compiler from
+https://docs.microsoft.com/en-gb/previous-versions/windows/desktop/htmlhelp/microsoft-html-help-downloads
+
+- Use it to Convert the Machine Stduy WinHelp Project:
+    - New -> Project
+    - Select "Convert WinHelp project"
+    - Locate the machstdy.hpj
+    - Create/Select target output folder (htmlhelp/)
+    - Compile it to a CHM either within the HTML Help Workshop or with:
+        $ cd htmlhelp
+        $ ~/.wine/drive_c/Program\ Files/HTML\ Help\ Workshop/hhc.exe machstdy.hhp
+
+- Convert the CHM to a QCH with chm2qch
+https://github.com/dewhisna/chm2qch
+
+$ chm2qch -g -c -n=com.multiplimachine.study -d qthelp/ htmlhelp/machstdy.chm
+
+- Build Qt collection qhc:
+
+$ cd qthelp
+$ rmdir -p html/qthelp/html/
+$ rmdir -p images/qthelp/images/
+$ <QT_BIN_PATH>/qcollectiongenerator ../machstdy.qhcp -o machstdy.qhc
+
+- Test with:
+$ <QT_BIN_PATH>/assistant -collectionFile machstdy.qhc
+
+- Deploy:
+$ cp machstdy.qhc <Install-Folder>
+$ cp machstdy.qch <Install-Folder>
+
+
+NOTES:
+	- When editing the .rtf file with LibreOffice, etc, it will be necessary to manually
+		edit the .rtf file with a plaintext editor and change all occurrences of "\*\footnote"
+		to "\footnote" or else an error will be displayed about not having the necessary
+		DLLs to convert RTF to HTML.
+	- When running HTML Help Workshop under Wine, you must use 'winecfg' to put exceptions
+		in for itircl.dll and itss.dll to be Native in the library settings (after registering
+		the ones from the app), see:
+			https://www.winehq.org/pipermail/wine-bugs/2015-September/423036.html
+		When done with HTML Help Workshop, change itss.dll back to Builtin or else other
+		help usages will crash.
+
