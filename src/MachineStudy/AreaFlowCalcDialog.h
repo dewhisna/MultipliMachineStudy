@@ -63,6 +63,8 @@ protected slots:
 	void calcWaterNeeded();
 	void calcCrossSectArea();
 
+	void showHelp();
+
 	void en_changeVelocity();
 	void en_changeWaterNeeded();
 	void en_changeCrossSectArea();

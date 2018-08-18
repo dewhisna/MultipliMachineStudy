@@ -38,6 +38,21 @@ class CHelpDialog : public QDialog
 	Q_OBJECT
 
 public:
+	enum HELP_DOCUMENT_ENUM {
+		HELPDOC_MAIN = 0,
+		HELPDOC_ABOUT = 1,
+		HELPDOC_APPLICATION = 2,
+		HELPDOC_CONTROL_TERMS = 3,
+		HELPDOC_DISCLAIMER = 4,
+		HELPDOC_IN_CASE_OF_TROUBLE = 5,
+		HELPDOC_INSTALLATION = 6,
+		HELPDOC_OTHER_HELPS = 7,
+		HELPDOC_PRINT_AND_EDIT = 8,
+		HELPDOC_TERMS = 9,
+		HELPDOC_WHY_DEVELOPED = 10,
+	};
+	static const QString helpDocument(HELP_DOCUMENT_ENUM nDocument);
+
 	explicit CHelpDialog(QWidget *parent = nullptr);
 	~CHelpDialog();
 

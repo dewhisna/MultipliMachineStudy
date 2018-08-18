@@ -64,6 +64,8 @@ protected slots:
 	void calcWaterNeeded();
 	void calcPipeSizeID();
 
+	void showHelp();
+
 	void en_changeVelocity();
 	void en_changeWaterNeeded();
 	void en_changePipeSizeID();

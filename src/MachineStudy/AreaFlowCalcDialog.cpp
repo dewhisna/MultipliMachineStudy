@@ -28,6 +28,7 @@
 #include "conversion.h"
 
 #include "MainWindow.h"
+#include "HelpDialog.h"
 
 #include <QPushButton>
 #include <QMessageBox>
@@ -57,7 +58,7 @@ CAreaFlowCalcDialog::CAreaFlowCalcDialog(bool bStandAlone, bool bMetric, QWidget
 	}
 	QPushButton *pHelpButton = ui->buttonBox->button(QDialogButtonBox::Help);
 	if (pHelpButton) {
-		connect(pHelpButton, SIGNAL(clicked(bool)), g_pMyMainWindow.data(), SLOT(showHelp()));
+		connect(pHelpButton, SIGNAL(clicked(bool)), this, SLOT(showHelp()));
 	}
 
 	m_pSaveApplyButton = bStandAlone ? pSaveButton : pApplyButton;
@@ -273,6 +274,15 @@ void CAreaFlowCalcDialog::setEnableSaveApply()
 	m_pSaveApplyButton->setEnabled(	validateVelocity(&nDummy, false) &&
 									validateWaterNeeded(&nDummy, false) &&
 									validateCrossSectArea(&nDummy, false));
+}
+
+// -----------------------------------------------------------------------------
+
+void CAreaFlowCalcDialog::showHelp()
+{
+	if (!g_pMyMainWindow.isNull()) {
+		g_pMyMainWindow->showHelp(CHelpDialog::helpDocument(CHelpDialog::HELPDOC_OTHER_HELPS));
+	}
 }
 
 // =============================================================================

@@ -114,6 +114,8 @@ protected slots:
 	void doVatsCalc();
 	void doProductionCalc();
 
+	void showHelp();
+
 	void en_changeCaliper();
 	void en_changeDensity();
 	void en_changeSheetWidth();

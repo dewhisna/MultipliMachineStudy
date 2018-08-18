@@ -24,11 +24,17 @@
 
 #include "HelpBrowser.h"
 
+#include <QDesktopServices>
+
+#include <assert.h>
+
 // =============================================================================
 
 CHelpBrowser::CHelpBrowser(QWidget *parent)
 	:	QTextBrowser(parent)
 {
+	setOpenLinks(false);		// Needed so we can control navigation on links
+	connect(this, SIGNAL(anchorClicked(QUrl)), this, SLOT(en_anchorClicked(QUrl)));
 }
 
 void CHelpBrowser::setHelpEngine(QHelpEngine* pHelpEngine)
@@ -41,7 +47,17 @@ QVariant CHelpBrowser::loadResource(int type, const QUrl &name)
 	if ((!m_pHelpEngine.isNull()) && (name.scheme() == "qthelp")) {
 		return QVariant(m_pHelpEngine->fileData(name));
 	} else {
+		assert(false);		// Should always have a HelpEngine and en_anchorClicked() should navigate external links
 		return QTextBrowser::loadResource(type, name);
+	}
+}
+
+void CHelpBrowser::en_anchorClicked(const QUrl &link)
+{
+	if (link.scheme() == "qthelp") {
+		if (!m_pHelpEngine.isNull()) setSource(link);
+	} else {
+		QDesktopServices::openUrl(link);
 	}
 }
 

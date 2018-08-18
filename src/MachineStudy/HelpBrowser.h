@@ -35,11 +35,16 @@
 
 class CHelpBrowser : public QTextBrowser
 {
+	Q_OBJECT
+
 public:
 	CHelpBrowser(QWidget* parent = 0);
 
 	void setHelpEngine(QHelpEngine* pHelpEngine);
 	virtual QVariant loadResource (int type, const QUrl& name) override;
+
+protected slots:
+	void en_anchorClicked(const QUrl &link);
 
 private:
 	QPointer<QHelpEngine> m_pHelpEngine;

@@ -65,6 +65,8 @@ public slots:
 protected slots:
 	bool calc(bool bPrompt = true);
 
+	void showHelp();
+
 	void en_changeYieldPerDay();
 	void en_changePresentConsistency();
 	void en_changeNewConsistency();

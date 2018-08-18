@@ -814,7 +814,11 @@ void CMainWindow::en_HelpAbout()
 void CMainWindow::showHelp(const QString &strDocument)
 {
 	en_HelpHelp();
-	m_pHelpDialog->navigateTo(strDocument);
+	if (!strDocument.isEmpty()) {
+		// Don't change help page unless call gives
+		//		help context:
+		m_pHelpDialog->navigateTo(strDocument);
+	}
 }
 
 // -------------------------------------

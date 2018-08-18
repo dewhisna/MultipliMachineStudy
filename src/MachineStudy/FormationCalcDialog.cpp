@@ -35,6 +35,7 @@
 #include "FormConstDialog.h"
 #include "YieldPerDayDialog.h"
 #include "ProductionCalcDialog.h"
+#include "HelpDialog.h"
 
 #include <QPushButton>
 #include <QMessageBox>
@@ -86,7 +87,7 @@ CFormationCalcDialog::CFormationCalcDialog(bool bStandAlone, bool bMetric, QWidg
 	}
 	QPushButton *pHelpButton = ui->buttonBox->button(QDialogButtonBox::Help);
 	if (pHelpButton) {
-		connect(pHelpButton, SIGNAL(clicked(bool)), g_pMyMainWindow.data(), SLOT(showHelp()));
+		connect(pHelpButton, SIGNAL(clicked(bool)), this, SLOT(showHelp()));
 	}
 
 	m_pSaveApplyButton = bStandAlone ? pSaveButton : pApplyButton;
@@ -782,6 +783,15 @@ void CFormationCalcDialog::en_changeAutoCalc()
 	QPalette pal = ui->editYieldPerDay->palette();
 	pal.setColor(QPalette::Base, bAutoCalc ? m_clrEditDisabled : m_clrEditEnabled);
 	ui->editYieldPerDay->setPalette(pal);
+}
+
+// -----------------------------------------------------------------------------
+
+void CFormationCalcDialog::showHelp()
+{
+	if (!g_pMyMainWindow.isNull()) {
+		g_pMyMainWindow->showHelp(CHelpDialog::helpDocument(CHelpDialog::HELPDOC_ABOUT));
+	}
 }
 
 // =============================================================================

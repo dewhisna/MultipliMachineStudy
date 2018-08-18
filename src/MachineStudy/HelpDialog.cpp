@@ -31,8 +31,48 @@
 // =============================================================================
 
 namespace {
-	const QString &gconstrBaseHelpURL = "qthelp://com.multiplimachine.study/doc/html";
-	const QString &gconstMainHelpPage = "mach0wc8.htm";
+	const QString gconstrBaseHelpURL = "qthelp://com.multiplimachine.study/doc/html";
+	const QString gconstMainHelpPage = "mach0wc8.htm";
+	const QString gconstAboutHelpPage = "mach15f8.htm";
+	const QString gconstApplicationHelpPage = "mach5mb2.htm";
+	const QString gconstControlTermsHelpPage = "mach008j.htm";
+	const QString gconstDisclaimerHelpPage = "mach3igi.htm";
+	const QString gconstInCaseOfTroubleHelpPage = "mach6gv9.htm";
+	const QString gconstInstallationHelpPage = "mach8ib2.htm";
+	const QString gconstOtherHelpsHelpPage = "mach0r5f.htm";
+	const QString gconstPrintAndEditHelpPage = "mach1i9g.htm";
+	const QString gconstTermsHelpPage = "mach0jlf.htm";
+	const QString gconstWhyDevelopedHelpPage = "mach8azx.htm";
+}
+
+const QString CHelpDialog::helpDocument(CHelpDialog::HELP_DOCUMENT_ENUM nDocument)
+{
+	switch(nDocument) {
+		case HELPDOC_MAIN:
+			return gconstMainHelpPage;
+		case HELPDOC_ABOUT:
+			return gconstAboutHelpPage;
+		case HELPDOC_APPLICATION:
+			return gconstApplicationHelpPage;
+		case HELPDOC_CONTROL_TERMS:
+			return gconstControlTermsHelpPage;
+		case HELPDOC_DISCLAIMER:
+			return gconstDisclaimerHelpPage;
+		case HELPDOC_IN_CASE_OF_TROUBLE:
+			return gconstInCaseOfTroubleHelpPage;
+		case HELPDOC_INSTALLATION:
+			return gconstInstallationHelpPage;
+		case HELPDOC_OTHER_HELPS:
+			return gconstOtherHelpsHelpPage;
+		case HELPDOC_PRINT_AND_EDIT:
+			return gconstPrintAndEditHelpPage;
+		case HELPDOC_TERMS:
+			return gconstTermsHelpPage;
+		case HELPDOC_WHY_DEVELOPED:
+			return gconstWhyDevelopedHelpPage;
+		default:
+			return QString();
+	}
 }
 
 // -----------------------------------------------------------------------------

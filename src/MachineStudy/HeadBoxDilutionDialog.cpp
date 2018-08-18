@@ -28,6 +28,7 @@
 #include "conversion.h"
 
 #include "MainWindow.h"
+#include "HelpDialog.h"
 
 #include <QPushButton>
 #include <QMessageBox>
@@ -60,7 +61,7 @@ CHeadBoxDilutionDialog::CHeadBoxDilutionDialog(bool bStandAlone, bool bMetric, Q
 	}
 	QPushButton *pHelpButton = ui->buttonBox->button(QDialogButtonBox::Help);
 	if (pHelpButton) {
-		connect(pHelpButton, SIGNAL(clicked(bool)), g_pMyMainWindow.data(), SLOT(showHelp()));
+		connect(pHelpButton, SIGNAL(clicked(bool)), this, SLOT(showHelp()));
 	}
 
 	m_pSaveApplyButton = bStandAlone ? pSaveButton : pApplyButton;
@@ -230,6 +231,15 @@ void CHeadBoxDilutionDialog::en_changePresentConsistency()
 void CHeadBoxDilutionDialog::en_changeNewConsistency()
 {
 	m_pSaveApplyButton->setEnabled(calc(false));
+}
+
+// -----------------------------------------------------------------------------
+
+void CHeadBoxDilutionDialog::showHelp()
+{
+	if (!g_pMyMainWindow.isNull()) {
+		g_pMyMainWindow->showHelp(CHelpDialog::helpDocument(CHelpDialog::HELPDOC_OTHER_HELPS));
+	}
 }
 
 // =============================================================================

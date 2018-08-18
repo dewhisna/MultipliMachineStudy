@@ -72,6 +72,8 @@ protected slots:
 
 	void doGrade();
 
+	void showHelp();
+
 	void en_changeSheetWidth();
 	void en_changeMachineSpeed();
 	void en_changeMachineEfficiency();
