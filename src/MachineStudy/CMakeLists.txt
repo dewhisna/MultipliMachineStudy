@@ -36,7 +36,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # ---------------------------------------------------------
 
-find_package(Qt5Widgets)
+find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Help Sql)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -59,6 +59,7 @@ add_definitions(
 if(WIN32)
 	add_definitions(
 		-DWIN32_LEAN_AND_MEAN
+		-D_USE_MATH_DEFINES
 	)
 endif()
 
@@ -152,56 +153,64 @@ set(HelpDialog_SOURCES
 	"HelpBrowser.h"
 )
 
-add_subdirectory(../QtFindReplaceDialog/dialogs QtFindReplaceDialog)
+# Add QtFindReplaceDialog, but exclude from 'all' build so it doesn't get
+#	"installed" with this application binary "make install":
+add_subdirectory(../QtFindReplaceDialog/dialogs QtFindReplaceDialog EXCLUDE_FROM_ALL)
+
+if(WIN32)
+	set(MY_COMPILE_OPTIONS "/W3")
+else()
+	set(MY_COMPILE_OPTIONS "-Wall")
+endif()
 
 add_library(MainWindow ${MainWindow_SOURCES})
-target_compile_options(MainWindow PUBLIC "-Wall")
-qt5_use_modules(MainWindow Core Widgets PrintSupport)
+target_compile_options(MainWindow PUBLIC ${MY_COMPILE_OPTIONS})
+qt5_use_modules(MainWindow Core Gui Widgets Help Sql PrintSupport)
 target_link_libraries(MainWindow QtFindReplaceDialog)
 
 add_library(CustomerDialog ${CustomerDialog_SOURCES})
-target_compile_options(CustomerDialog PUBLIC "-Wall")
-qt5_use_modules(CustomerDialog Core Widgets)
+target_compile_options(CustomerDialog PUBLIC ${MY_COMPILE_OPTIONS})
+qt5_use_modules(CustomerDialog Core Gui Widgets)
 
 add_library(FormationCalcDialog ${FormationCalcDialog_SOURCES})
-target_compile_options(FormationCalcDialog PUBLIC "-Wall")
-qt5_use_modules(FormationCalcDialog Core Widgets)
+target_compile_options(FormationCalcDialog PUBLIC ${MY_COMPILE_OPTIONS})
+qt5_use_modules(FormationCalcDialog Core Gui Widgets)
 
 add_library(ProductionCalcDialog ${ProductionCalcDialog_SOURCES})
-target_compile_options(ProductionCalcDialog PUBLIC "-Wall")
-qt5_use_modules(ProductionCalcDialog Core Widgets)
+target_compile_options(ProductionCalcDialog PUBLIC ${MY_COMPILE_OPTIONS})
+qt5_use_modules(ProductionCalcDialog Core Gui Widgets)
 
 add_library(GradeCalcDialog ${GradeCalcDialog_SOURCES})
-target_compile_options(GradeCalcDialog PUBLIC "-Wall")
-qt5_use_modules(GradeCalcDialog Core Widgets)
+target_compile_options(GradeCalcDialog PUBLIC ${MY_COMPILE_OPTIONS})
+qt5_use_modules(GradeCalcDialog Core Gui Widgets)
 
 add_library(HeadBoxDilutionDialog ${HeadBoxDilutionDialog_SOURCES})
-target_compile_options(HeadBoxDilutionDialog PUBLIC "-Wall")
-qt5_use_modules(HeadBoxDilutionDialog Core Widgets)
+target_compile_options(HeadBoxDilutionDialog PUBLIC ${MY_COMPILE_OPTIONS})
+qt5_use_modules(HeadBoxDilutionDialog Core Gui Widgets)
 
 add_library(FormConstDialog ${FormConstDialog_SOURCES})
-target_compile_options(FormConstDialog PUBLIC "-Wall")
-qt5_use_modules(FormConstDialog Core Widgets)
+target_compile_options(FormConstDialog PUBLIC ${MY_COMPILE_OPTIONS})
+qt5_use_modules(FormConstDialog Core Gui Widgets)
 
 add_library(PipeFlowCalcDialog ${PipeFlowCalcDialog_SOURCES})
-target_compile_options(PipeFlowCalcDialog PUBLIC "-Wall")
-qt5_use_modules(PipeFlowCalcDialog Core Widgets)
+target_compile_options(PipeFlowCalcDialog PUBLIC ${MY_COMPILE_OPTIONS})
+qt5_use_modules(PipeFlowCalcDialog Core Gui Widgets)
 
 add_library(AreaFlowCalcDialog ${AreaFlowCalcDialog_SOURCES})
-target_compile_options(AreaFlowCalcDialog PUBLIC "-Wall")
-qt5_use_modules(AreaFlowCalcDialog Core Widgets)
+target_compile_options(AreaFlowCalcDialog PUBLIC ${MY_COMPILE_OPTIONS})
+qt5_use_modules(AreaFlowCalcDialog Core Gui Widgets)
 
 add_library(YieldPerDayDialog ${YieldPerDayDialog_SOURCES})
-target_compile_options(YieldPerDayDialog PUBLIC "-Wall")
-qt5_use_modules(YieldPerDayDialog Core Widgets)
+target_compile_options(YieldPerDayDialog PUBLIC ${MY_COMPILE_OPTIONS})
+qt5_use_modules(YieldPerDayDialog Core Gui Widgets)
 
 add_library(AboutDialog ${AboutDialog_SOURCES})
-target_compile_options(AboutDialog PUBLIC "-Wall")
-qt5_use_modules(AboutDialog Core Widgets)
+target_compile_options(AboutDialog PUBLIC ${MY_COMPILE_OPTIONS})
+qt5_use_modules(AboutDialog Core Gui Widgets)
 
 add_library(HelpDialog ${HelpDialog_SOURCES})
-target_compile_options(HelpDialog PUBLIC "-Wall")
-qt5_use_modules(HelpDialog Core Widgets Help)
+target_compile_options(HelpDialog PUBLIC ${MY_COMPILE_OPTIONS})
+qt5_use_modules(HelpDialog Core Gui Widgets Help Sql)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME}
@@ -218,5 +227,59 @@ target_link_libraries(${PROJECT_NAME}
 		AboutDialog
 		HelpDialog
 )
-target_compile_options(${PROJECT_NAME} PUBLIC "-Wall")
+target_compile_options(${PROJECT_NAME} PUBLIC ${MY_COMPILE_OPTIONS})
+
+set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR}/install CACHE PATH "Installation Prefix Folder" FORCE)
+
+install(TARGETS
+		${PROJECT_NAME}
+		RUNTIME DESTINATION bin
+		LIBRARY DESTINATION bin
+)
+
+# Deploy Help Files
+add_custom_command(
+	TARGET ${PROJECT_NAME} POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/../../doc/qthelp/machstdy.qch $<TARGET_FILE_DIR:${PROJECT_NAME}>
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/../../doc/qthelp/machstdy.qhc $<TARGET_FILE_DIR:${PROJECT_NAME}>
+)
+
+install(FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/../../doc/qthelp/machstdy.qch
+		${CMAKE_CURRENT_SOURCE_DIR}/../../doc/qthelp/machstdy.qhc
+		DESTINATION bin
+)
+
+if(WIN32)
+	# Include DLLs needed on Windows:
+	#	This logic doesn't work for Linux since the rpath
+	#	won't be set, plus Qt needs to be compiled with
+	#	the other system dependencies too...
+	add_custom_command(
+		TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Core> $<TARGET_FILE_DIR:${PROJECT_NAME}>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Gui> $<TARGET_FILE_DIR:${PROJECT_NAME}>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE_DIR:${PROJECT_NAME}>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::PrintSupport> $<TARGET_FILE_DIR:${PROJECT_NAME}>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Help> $<TARGET_FILE_DIR:${PROJECT_NAME}>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Sql> $<TARGET_FILE_DIR:${PROJECT_NAME}>
+		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/sqldrivers
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QSQLiteDriverPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/sqldrivers
+	)
+
+	install(FILES
+			$<TARGET_FILE:Qt5::Core>
+			$<TARGET_FILE:Qt5::Gui>
+			$<TARGET_FILE:Qt5::Widgets>
+			$<TARGET_FILE:Qt5::PrintSupport>
+			$<TARGET_FILE:Qt5::Help>
+			$<TARGET_FILE:Qt5::Sql>
+			DESTINATION bin
+	)
+
+	install(FILES
+			$<TARGET_FILE:Qt5::QSQLiteDriverPlugin>
+			DESTINATION bin/plugins/sqldrivers
+	)
+endif()
 
