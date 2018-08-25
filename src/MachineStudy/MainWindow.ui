@@ -42,8 +42,10 @@
      <widget class="QTextEdit" name="editMainText">
       <property name="font">
        <font>
-        <family>Courier 10 Pitch</family>
-        <pointsize>10</pointsize>
+        <family>Courier New</family>
+        <pointsize>12</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
        </font>
       </property>
      </widget>

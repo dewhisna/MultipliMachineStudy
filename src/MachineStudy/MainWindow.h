@@ -28,6 +28,7 @@
 #include <QMainWindow>
 #include <QAction>
 #include <QPointer>
+#include <QFont>
 
 #include "PipeFlowCalcDialog.h"
 #include "AreaFlowCalcDialog.h"
@@ -114,6 +115,7 @@ private:
 	QPointer<FindDialog> m_pFindDialog;
 	QPointer<FindReplaceDialog> m_pFindReplaceDialog;
 	QPointer<CHelpDialog> m_pHelpDialog;
+	QFont m_fntFixed;
 	Ui::CMainWindow *ui;
 };
 

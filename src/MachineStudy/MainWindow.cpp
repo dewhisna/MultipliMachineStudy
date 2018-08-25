@@ -61,9 +61,16 @@ CMainWindow::CMainWindow(QWidget *parent) :
 	m_bHaveTextOutput(false),
 	m_bDirty(false),
 	m_pMetricAction(nullptr),
+	m_fntFixed("Courier New"),
 	ui(new Ui::CMainWindow)
 {
 	ui->setupUi(this);
+
+	m_fntFixed.setStyleHint(QFont::TypeWriter);
+	m_fntFixed.setPointSize(12);
+	m_fntFixed.setWeight(50);
+	m_fntFixed.setBold(false);
+	ui->editMainText->setFont(m_fntFixed);
 
 	m_strMainWindowTitle = windowTitle();
 
