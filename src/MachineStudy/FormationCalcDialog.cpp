@@ -652,7 +652,7 @@ void CFormationCalcDialog::doProductionCalc()
 		if (m_DialogValues.m_nMachineEfficiency) nYieldPerDay /= m_DialogValues.m_nMachineEfficiency;
 		double nSheetWidth;
 		int nNumberOfVats;
-		double nFormConst;
+		double nFormConst = 0.0;
 		bool bFormConstValid = false;
 		bool bFormDelta = true;
 		if ((validateSheetWidth(&nSheetWidth, false)) &&
