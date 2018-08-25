@@ -212,7 +212,13 @@ add_library(HelpDialog ${HelpDialog_SOURCES})
 target_compile_options(HelpDialog PUBLIC ${MY_COMPILE_OPTIONS})
 qt5_use_modules(HelpDialog Core Gui Widgets Help Sql)
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+if(WIN32)
+	set(GUI_TYPE WIN32)
+elseif(APPLE)
+	set(GUI_TYPE MACOSX_BUNDLE)
+endif()
+
+add_executable(${PROJECT_NAME} ${GUI_TYPE} ${SOURCES})
 target_link_libraries(${PROJECT_NAME}
 		MainWindow
 		CustomerDialog
