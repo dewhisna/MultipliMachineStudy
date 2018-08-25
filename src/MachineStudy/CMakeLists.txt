@@ -34,6 +34,9 @@ project(MachineStudy LANGUAGES ${LANGUAGES} VERSION 2.0.0.0)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+# The following copies the msvc runtime dlls to the install folder on Windows:
+include(InstallRequiredSystemLibraries)
+
 # ---------------------------------------------------------
 
 find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Help Sql)
@@ -269,9 +272,32 @@ if(WIN32)
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::PrintSupport> $<TARGET_FILE_DIR:${PROJECT_NAME}>
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Help> $<TARGET_FILE_DIR:${PROJECT_NAME}>
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Sql> $<TARGET_FILE_DIR:${PROJECT_NAME}>
-		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/sqldrivers
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QSQLiteDriverPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/plugins/sqldrivers
+		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/platforms
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QWindowsIntegrationPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/platforms
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QMinimalIntegrationPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/platforms
+		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/platformthemes
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QFlatpakThemePlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/platformthemes
+		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/generic
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QTuioTouchPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/generic
+		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/imageformats
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QGifPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/imageformats
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QICNSPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/imageformats
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QICOPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/imageformats
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QJpegPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/imageformats
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QWbmpPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/imageformats
+		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/styles
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QWindowsVistaStylePlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/styles
+		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/sqldrivers
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QSQLiteDriverPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/sqldrivers
+		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/printsupport
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QWindowsPrinterSupportPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/printsupport
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE $<TARGET_FILE_DIR:${PROJECT_NAME}>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/gpl-3.0.txt $<TARGET_FILE_DIR:${PROJECT_NAME}>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/MachineStudy.iss $<TARGET_FILE_DIR:${PROJECT_NAME}>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/version.iss $<TARGET_FILE_DIR:${PROJECT_NAME}>
 	)
+
+#	message(status "Core: ${Qt5Core_PLUGINS}  Gui: ${Qt5Gui_PLUGINS}  Widgets: ${Qt5Widgets_PLUGINS}  Help: ${Qt5Help_PLUGINS}  PrintSupport: ${Qt5PrintSupport_PLUGINS}  SQL: ${Qt5Sql_PLUGINS}")
 
 	install(FILES
 			$<TARGET_FILE:Qt5::Core>
@@ -280,12 +306,51 @@ if(WIN32)
 			$<TARGET_FILE:Qt5::PrintSupport>
 			$<TARGET_FILE:Qt5::Help>
 			$<TARGET_FILE:Qt5::Sql>
+			LICENSE
+			gpl-3.0.txt
+			MachineStudy.iss
+			version.iss
 			DESTINATION bin
 	)
 
 	install(FILES
+			$<TARGET_FILE:Qt5::QWindowsIntegrationPlugin>
+			$<TARGET_FILE:Qt5::QMinimalIntegrationPlugin>
+			DESTINATION bin/platforms
+	)
+
+	install(FILES
+			$<TARGET_FILE:Qt5::QFlatpakThemePlugin>
+			DESTINATION bin/platformthemes
+	)
+
+	install(FILES
+			$<TARGET_FILE:Qt5::QTuioTouchPlugin>
+			DESTINATION bin/generic
+	)
+
+	install(FILES
+			$<TARGET_FILE:Qt5::QGifPlugin>
+			$<TARGET_FILE:Qt5::QICNSPlugin>
+			$<TARGET_FILE:Qt5::QICOPlugin>
+			$<TARGET_FILE:Qt5::QJpegPlugin>
+			$<TARGET_FILE:Qt5::QWbmpPlugin>
+			DESTINATION bin/imageformats
+	)
+
+	install(FILES
+			$<TARGET_FILE:Qt5::QWindowsVistaStylePlugin>
+			DESTINATION bin/styles
+	)
+
+	install(FILES
 			$<TARGET_FILE:Qt5::QSQLiteDriverPlugin>
-			DESTINATION bin/plugins/sqldrivers
+			DESTINATION bin/sqldrivers
+	)
+
+	install(FILES
+			$<TARGET_FILE:Qt5::QWindowsPrinterSupportPlugin>
+			DESTINATION bin/printsupport
 	)
 endif()
 
