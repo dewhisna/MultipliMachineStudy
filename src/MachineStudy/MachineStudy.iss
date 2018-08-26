@@ -99,6 +99,10 @@ Source: ".\concrt140.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: ".\machstdy.qch"; DestDir: "{app}"; Flags: ignoreversion;
 Source: ".\machstdy.qhc"; DestDir: "{app}"; Flags: ignoreversion;
 
+; PDF HelpFiles:
+Source: ".\MachineStudy.pdf"; DestDir: "{app}"; Flags: ignoreversion;
+Source: ".\MachineStudy-Examples.pdf"; DestDir: "{app}"; Flags: ignoreversion;
+
 ; license
 Source: ".\LICENSE"; DestDir: "{app}"; Flags: ignoreversion;
 Source: ".\gpl-3.0.txt"; DestDir: "{app}"; Flags: ignoreversion;
@@ -106,6 +110,8 @@ Source: ".\gpl-3.0.txt"; DestDir: "{app}"; Flags: ignoreversion;
 [Icons]
 Name: "{group}\{#SetupSetting("AppName")}"; Filename: "{app}\MachineStudy.exe";
 Name: "{group}\{cm:UninstallProgram,{#SetupSetting("AppName")}}"; Filename: "{uninstallexe}";
+Name: "{group}\Machine Study Documentation"; Filename: "{app}\MachineStudy.pdf";
+Name: "{group}\Machine Study Examples"; Filename: "{app}\MachineStudy-Examples.pdf";
 Name: "{commondesktop}\{#SetupSetting("AppName")}"; Filename: "{app}\MachineStudy.exe"; Tasks: desktopicon;
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#SetupSetting("AppName")}"; Filename: "{app}\MachineStudy.exe"; Tasks: quicklaunchicon;
 

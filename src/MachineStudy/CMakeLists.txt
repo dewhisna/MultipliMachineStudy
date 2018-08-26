@@ -251,11 +251,15 @@ add_custom_command(
 	TARGET ${PROJECT_NAME} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/../../doc/qthelp/machstdy.qch $<TARGET_FILE_DIR:${PROJECT_NAME}>
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/../../doc/qthelp/machstdy.qhc $<TARGET_FILE_DIR:${PROJECT_NAME}>
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/../../doc/MachineStudy.pdf $<TARGET_FILE_DIR:${PROJECT_NAME}>
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/../../doc/MachineStudy-Examples.pdf $<TARGET_FILE_DIR:${PROJECT_NAME}>
 )
 
 install(FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/../../doc/qthelp/machstdy.qch
 		${CMAKE_CURRENT_SOURCE_DIR}/../../doc/qthelp/machstdy.qhc
+		${CMAKE_CURRENT_SOURCE_DIR}/../../doc/MachineStudy.pdf
+		${CMAKE_CURRENT_SOURCE_DIR}/../../doc/MachineStudy-Examples.pdf
 		DESTINATION bin
 )
 
