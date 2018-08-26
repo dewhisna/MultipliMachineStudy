@@ -80,5 +80,5 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON1               ICON                    "res/mmcms2.ico"
+IDI_ICON1               ICON                    "res/mmcms4.ico"
 

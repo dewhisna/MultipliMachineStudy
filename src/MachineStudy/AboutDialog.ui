@@ -75,15 +75,15 @@ Written and developed for Multipli Machinery by Donald Whisnant</string>
      </property>
      <property name="minimumSize">
       <size>
-       <width>190</width>
-       <height>190</height>
+       <width>192</width>
+       <height>192</height>
       </size>
      </property>
      <property name="text">
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="MachineStudy.qrc">:/res/mmc2.png</pixmap>
+      <pixmap resource="MachineStudy.qrc">:/res/mmc4.png</pixmap>
      </property>
     </widget>
    </item>

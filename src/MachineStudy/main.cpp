@@ -45,9 +45,9 @@ int main(int argc, char *argv[])
 	Q_INIT_RESOURCE(MachineStudy);
 
 #ifdef Q_OS_WIN32
-	a.setWindowIcon(QIcon(":/res/mmcms2.ico"));
+	a.setWindowIcon(QIcon(":/res/mmcms4.ico"));
 #elif !defined(Q_OS_MAC)	// Normally, this would also include Mac, but Mac has its icon set in the project file.  Loading this one makes it fuzzy.
-	a.setWindowIcon(QIcon(":/res/mmc2.png"));
+	a.setWindowIcon(QIcon(":/res/mmc4.png"));
 #endif
 
 #ifdef Q_OS_WIN
