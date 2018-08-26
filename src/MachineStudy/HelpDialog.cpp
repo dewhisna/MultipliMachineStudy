@@ -78,7 +78,7 @@ const QString CHelpDialog::helpDocument(CHelpDialog::HELP_DOCUMENT_ENUM nDocumen
 // -----------------------------------------------------------------------------
 
 CHelpDialog::CHelpDialog(QWidget *parent) :
-	QDialog(parent),
+	QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint),
 	ui(new Ui::CHelpDialog)
 {
 	ui->setupUi(this);

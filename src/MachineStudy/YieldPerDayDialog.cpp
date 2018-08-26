@@ -32,7 +32,7 @@
 // =============================================================================
 
 CYieldPerDayDialog::CYieldPerDayDialog(bool bMetric, QWidget *parent) :
-	QDialog(parent),
+	QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint),
 	m_bMetric(bMetric),
 	m_pOKButton(nullptr),
 	ui(new Ui::CYieldPerDayDialog)

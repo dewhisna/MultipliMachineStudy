@@ -35,7 +35,7 @@
 // =============================================================================
 
 CFormConstDialog::CFormConstDialog(bool bStandAlone, bool bMetric, QWidget *parent) :
-	QDialog(parent),
+	QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint),
 	m_bStandAlone(bStandAlone),
 	m_bMetric(bMetric),
 	m_pCalcButton(nullptr),

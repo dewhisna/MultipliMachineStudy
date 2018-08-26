@@ -28,7 +28,7 @@
 // =============================================================================
 
 CCustomerDialog::CCustomerDialog(QWidget *parent) :
-	QDialog(parent),
+	QDialog(parent, Qt::WindowTitleHint | Qt::WindowSystemMenuHint),
 	ui(new Ui::CCustomerDialog)
 {
 	ui->setupUi(this);
