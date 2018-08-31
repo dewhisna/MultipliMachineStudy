@@ -1,4 +1,4 @@
-version: build{build}
+version: 2.1.0-{build}
 
 image:
   - Visual Studio 2017
@@ -9,8 +9,10 @@ init:
   - mkdir C:\util
   - set QTDIR=C:\Qt\5.11.1\msvc2015
   - set "PATH=%PATH%;%QTDIR%\bin;C:\util;C:\Program Files (x86)\Inno Setup 5"
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
 
 install:
+  - git submodule update --iniit --recursive
   - curl -sSL https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-win.zip > C:\util\ninja-win.zip
   - 7z e -oC:\util C:\util\ninja-win.zip
 
@@ -20,7 +22,7 @@ before_build:
 
 build_script:
   - cd build-MachineStudy-Qt_5_11_1-Release
-  - cmake ..\MachineStudy -DCMAKE_BUILD_TYPE=RelWithDebInfo -G Ninja
+  - cmake ..\MachineStudy -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja -DCMAKE_CXX_COMPILER=cl.exe -DCMAKE_C_COMPILER=cl.exe
   - cmake --build . --target all
 
 after_build:
