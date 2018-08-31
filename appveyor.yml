@@ -1,4 +1,4 @@
-version: 2.1.0-{build}
+version: build{build}
 
 image:
   - Visual Studio 2017
@@ -6,6 +6,16 @@ image:
 clone_folder: C:\Documents\programs\MultipliMachineStudy
 
 init:
+  # Set "build version number" to "short-commit-hash" or when tagged to "tag name" (Travis style)
+  - ps: >-
+      if ($env:APPVEYOR_REPO_TAG -eq "true")
+      {
+        Update-AppveyorBuild -Version "$($env:APPVEYOR_REPO_TAG_NAME.TrimStart("v"))"
+      }
+      else
+      {
+        Update-AppveyorBuild -Version "dev-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))-$env:APPVEYOR_BUILD_NUMBER"
+      }
   - mkdir C:\util
   - set QTDIR=C:\Qt\5.11.1\msvc2015
   - set "PATH=%PATH%;%QTDIR%\bin;C:\util;C:\Program Files (x86)\Inno Setup 5"
@@ -33,5 +43,5 @@ after_build:
 test: off
 
 artifacts:
-  - path: 'Output/*.exe'
+  - path: 'src\build-MachineStudy-Qt_5_11_1-Release\install\bin\Output\*.exe'
 
