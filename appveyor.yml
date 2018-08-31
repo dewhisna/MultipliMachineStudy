@@ -1,0 +1,35 @@
+version: build{build}
+
+image:
+  - Visual Studio 2017
+
+clone_folder: C:\Documents\programs\MultipliMachineStudy
+
+init:
+  - mkdir C:\util
+  - set QTDIR=C:\Qt\5.11.1\msvc2015
+  - set "PATH=%PATH%;%QTDIR%\bin;C:\util;C:\Program Files (x86)\Inno Setup 5"
+
+install:
+  - curl -sSL https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-win.zip > C:\util\ninja-win.zip
+  - 7z e -oC:\util C:\util\ninja-win.zip
+
+before_build:
+  - cd C:\Documents\programs\MultipliMachineStudy\src
+  - mkdir build-MachineStudy-Qt_5_11_1-Release
+
+build_script:
+  - cd build-MachineStudy-Qt_5_11_1-Release
+  - cmake ..\MachineStudy -DCMAKE_BUILD_TYPE=RelWithDebInfo -G Ninja
+  - cmake --build . --target all
+
+after_build:
+  - cmake --build . --target install
+  - cd install\bin
+  - iscc MachineStudy.iss
+
+test: off
+
+artifacts:
+  - path: 'Output/*.exe'
+
