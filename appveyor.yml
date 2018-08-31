@@ -12,7 +12,7 @@ init:
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
 
 install:
-  - git submodule update --iniit --recursive
+  - git submodule update --init --recursive
   - curl -sSL https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-win.zip > C:\util\ninja-win.zip
   - 7z e -oC:\util C:\util\ninja-win.zip
 
