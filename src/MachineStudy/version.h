@@ -32,8 +32,12 @@
 #define VER_PRODUCTVERSION			2,1,0,0
 #define VER_PRODUCTVERSION_STR		"2,1,0,0\0"
 
-#define VER_SPECIALVERSION_STR		"Alpha Test Version\0"
+#ifndef VER_SPECIALVERSION_STR
+#define VER_SPECIALVERSION_STR		"\0"
 #define SPECIAL_BUILD				0
+#else
+#define SPECIAL_BUILD				1
+#endif
 
 #define VER_BUILD_DATE_STR			__DATE__
 #define VER_BUILD_TIME_STR			__TIME__

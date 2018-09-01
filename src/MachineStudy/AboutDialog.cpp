@@ -25,6 +25,8 @@
 #include "AboutDialog.h"
 #include "ui_AboutDialog.h"
 
+#include "version.h"
+
 #include <QApplication>
 
 // =============================================================================
@@ -35,7 +37,11 @@ CAboutDialog::CAboutDialog(QWidget *parent) :
 {
 	ui->setupUi(this);
 
-	ui->lblProgramName->setText(ui->lblProgramName->text() + QApplication::applicationVersion());
+	QString strSpecialBuild;
+#if SPECIAL_BUILD
+	strSpecialBuild = "\nSpecial Build: " VER_SPECIALVERSION_STR;
+#endif
+	ui->lblProgramName->setText(ui->lblProgramName->text() + QApplication::applicationVersion() + strSpecialBuild);
 }
 
 CAboutDialog::~CAboutDialog()

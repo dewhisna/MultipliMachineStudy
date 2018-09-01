@@ -66,6 +66,12 @@ if(WIN32)
 	)
 endif()
 
+if(VER_SPECIALVERSION_STR)
+	add_definitions(
+		-DVER_SPECIALVERSION_STR=\"${VER_SPECIALVERSION_STR}\"
+	)
+endif()
+
 # ---------------------------------------------------------
 
 set(SOURCES

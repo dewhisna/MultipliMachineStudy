@@ -32,7 +32,15 @@ before_build:
 
 build_script:
   - cd build-MachineStudy-Qt_5_11_1-Release
-  - cmake ..\MachineStudy -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja -DCMAKE_CXX_COMPILER=cl.exe -DCMAKE_C_COMPILER=cl.exe
+  - ps: >-
+      if ($env:APPVEYOR_REPO_TAG -eq "true")
+      {
+        cmake ..\MachineStudy -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja -DCMAKE_CXX_COMPILER=cl.exe -DCMAKE_C_COMPILER=cl.exe
+      }
+      else
+      {
+        cmake ..\MachineStudy -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja -DCMAKE_CXX_COMPILER=cl.exe -DCMAKE_C_COMPILER=cl.exe -DVER_SPECIALVERSION_STR="dev-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))-$env:APPVEYOR_BUILD_NUMBER"
+      }
   - cmake --build . --target all
 
 after_build:
