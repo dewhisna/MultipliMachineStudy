@@ -34,7 +34,7 @@ before_build:
 
 build_script:
   - cd build-MachineStudy-Qt_5_11_1-Release
-  - cmake ..\MachineStudy -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja -DCMAKE_CXX_COMPILER=cl.exe -DCMAKE_C_COMPILER=cl.exe -DVER_SPECIALVERSION_STR=%SPECIALVERSION%
+  - cmake ..\MachineStudy -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja -DCMAKE_CXX_COMPILER=cl.exe -DCMAKE_C_COMPILER=cl.exe -DSPECIALVERSION=%SPECIALVERSION%
   - cmake --build . --target all
 
 after_build:
