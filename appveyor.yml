@@ -10,10 +10,12 @@ init:
   - ps: >-
       if ($env:APPVEYOR_REPO_TAG -eq "true")
       {
+        set SPECIALVERSION=""
         Update-AppveyorBuild -Version "$($env:APPVEYOR_REPO_TAG_NAME.TrimStart("v"))"
       }
       else
       {
+        set SPECIALVERSION="dev-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))-$env:APPVEYOR_BUILD_NUMBER"
         Update-AppveyorBuild -Version "dev-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))-$env:APPVEYOR_BUILD_NUMBER"
       }
   - mkdir C:\util
@@ -32,15 +34,7 @@ before_build:
 
 build_script:
   - cd build-MachineStudy-Qt_5_11_1-Release
-  - ps: >-
-      if ($env:APPVEYOR_REPO_TAG -eq "true")
-      {
-        cmake ..\MachineStudy -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja -DCMAKE_CXX_COMPILER=cl.exe -DCMAKE_C_COMPILER=cl.exe
-      }
-      else
-      {
-        cmake ..\MachineStudy -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja -DCMAKE_CXX_COMPILER=cl.exe -DCMAKE_C_COMPILER=cl.exe -DVER_SPECIALVERSION_STR="dev-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))-$env:APPVEYOR_BUILD_NUMBER"
-      }
+  - cmake ..\MachineStudy -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja -DCMAKE_CXX_COMPILER=cl.exe -DCMAKE_C_COMPILER=cl.exe -DVER_SPECIALVERSION_STR=%SPECIALVERSION%
   - cmake --build . --target all
 
 after_build:
