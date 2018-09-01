@@ -10,12 +10,12 @@ init:
   - ps: >-
       if ($env:APPVEYOR_REPO_TAG -eq "true")
       {
-        set SPECIALVERSION=""
+        Set-AppveyorBuildVariable "SPECIALVERSION" ""
         Update-AppveyorBuild -Version "$($env:APPVEYOR_REPO_TAG_NAME.TrimStart("v"))"
       }
       else
       {
-        set SPECIALVERSION="dev-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))-$env:APPVEYOR_BUILD_NUMBER"
+        Set-AppveyorBuildVariable "SPECIALVERSION" "dev-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))-$env:APPVEYOR_BUILD_NUMBER"
         Update-AppveyorBuild -Version "dev-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))-$env:APPVEYOR_BUILD_NUMBER"
       }
   - mkdir C:\util
