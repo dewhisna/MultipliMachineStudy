@@ -31,6 +31,8 @@
 #ifndef _CONVERSION_H_
 #define _CONVERSION_H_
 
+#include <math.h>
+
 //
 // Conversion Constants:
 //          Imperial -> Metric     Multiply by conversion factor
