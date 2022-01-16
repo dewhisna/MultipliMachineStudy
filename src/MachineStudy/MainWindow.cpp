@@ -37,6 +37,8 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
+#include <QPageLayout>
+#include <QPageSize>
 #include <QSharedPointer>
 
 #include "CustomerDialog.h"
@@ -76,8 +78,8 @@ CMainWindow::CMainWindow(QWidget *parent) :
 
 	if (g_pPrinter.isNull()) {
 		g_pPrinter = QSharedPointer<QPrinter>(new QPrinter(QPrinter::HighResolution));
-		g_pPrinter->setPageSize(QPrinter::Letter);
-		g_pPrinter->setOrientation(QPrinter::Portrait);
+		g_pPrinter->setPageSize(QPageSize(QPageSize::Letter));
+		g_pPrinter->setPageOrientation(QPageLayout::Portrait);
 		g_pPrinter->setFullPage(true);
 		g_pPrinter->setOutputFormat(QPrinter::NativeFormat);
 		g_pPrinter->setCreator(QApplication::applicationName());
