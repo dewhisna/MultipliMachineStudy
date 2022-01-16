@@ -70,7 +70,7 @@ CMainWindow::CMainWindow(QWidget *parent) :
 
 	m_fntFixed.setStyleHint(QFont::TypeWriter);
 	m_fntFixed.setPointSize(12);
-	m_fntFixed.setWeight(50);
+	m_fntFixed.setWeight(static_cast<QFont::Weight>(50));	// QFont::Normal
 	m_fntFixed.setBold(false);
 	ui->editMainText->setFont(m_fntFixed);
 
@@ -91,15 +91,15 @@ CMainWindow::CMainWindow(QWidget *parent) :
 	// ----------------
 	// --- File Menu
 	QMenu *pFileMenu = ui->menuBar->addMenu(tr("&File", "MainMenu"));
-	pAction = pFileMenu->addAction(QIcon(":/res/file-new-icon2.png"), tr("&New", "MainMenu"), this, SLOT(en_NewFile()), QKeySequence(Qt::CTRL + Qt::Key_N));
+	pAction = pFileMenu->addAction(QIcon(":/res/file-new-icon2.png"), tr("&New", "MainMenu"), this, SLOT(en_NewFile()), QKeySequence(Qt::CTRL | Qt::Key_N));
 	pAction->setStatusTip(tr("Create New Text Document", "MainMenu"));
 	pAction->setToolTip(tr("Create New Text Document", "MainMenu"));
 	ui->mainToolBar->addAction(pAction);
-	pAction = pFileMenu->addAction(QIcon(":/res/open-file-icon3.png"), tr("&Open", "MainMenu"), this, SLOT(en_OpenFile()), QKeySequence(Qt::CTRL + Qt::Key_O));
+	pAction = pFileMenu->addAction(QIcon(":/res/open-file-icon3.png"), tr("&Open", "MainMenu"), this, SLOT(en_OpenFile()), QKeySequence(Qt::CTRL | Qt::Key_O));
 	pAction->setStatusTip(tr("Open Text Document", "MainMenu"));
 	pAction->setToolTip(tr("Open Text Document", "MainMenu"));
 	ui->mainToolBar->addAction(pAction);
-	pAction = pFileMenu->addAction(QIcon(":/res/save-file-icon3.png"), tr("&Save", "MainMenu"), this, SLOT(en_SaveFile()), QKeySequence(Qt::CTRL + Qt::Key_S));
+	pAction = pFileMenu->addAction(QIcon(":/res/save-file-icon3.png"), tr("&Save", "MainMenu"), this, SLOT(en_SaveFile()), QKeySequence(Qt::CTRL | Qt::Key_S));
 	pAction->setStatusTip(tr("Save Text Document", "MainMenu"));
 	pAction->setToolTip(tr("Save Text Document", "MainMenu"));
 	ui->mainToolBar->addAction(pAction);
@@ -117,41 +117,41 @@ CMainWindow::CMainWindow(QWidget *parent) :
 	pAction->setToolTip(tr("Print Preview", "MainMenu"));
 	pFileMenu->addSeparator();
 	ui->mainToolBar->addSeparator();
-	pAction = pFileMenu->addAction(QIcon(":/res/exit.png"), tr("E&xit", "MainMenu"), this, SLOT(en_quit()), QKeySequence(Qt::CTRL + Qt::Key_Q));
+	pAction = pFileMenu->addAction(QIcon(":/res/exit.png"), tr("E&xit", "MainMenu"), this, SLOT(en_quit()), QKeySequence(Qt::CTRL | Qt::Key_Q));
 	pAction->setStatusTip(tr("Quit Application", "MainMenu"));
 	pAction->setToolTip(tr("Quit Application", "MainMenu"));
 	ui->mainToolBar->addAction(pAction);
 
 	// --- Edit Menu
 	QMenu *pEditMenu = ui->menuBar->addMenu(tr("&Edit", "MainMenu"));
-	pAction = pEditMenu->addAction(tr("&Undo", "MainMenu"), ui->editMainText, SLOT(undo()), QKeySequence(Qt::CTRL + Qt::Key_Z));
+	pAction = pEditMenu->addAction(tr("&Undo", "MainMenu"), ui->editMainText, SLOT(undo()), QKeySequence(Qt::CTRL | Qt::Key_Z));
 	pAction->setStatusTip(tr("Undo last edit"));
 	pAction->setToolTip(tr("Undo"));
 	connect(ui->editMainText, SIGNAL(undoAvailable(bool)), pAction, SLOT(setEnabled(bool)));
-	pAction = pEditMenu->addAction(tr("&Redo", "MainMenu"), ui->editMainText, SLOT(redo()), QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_K));
+	pAction = pEditMenu->addAction(tr("&Redo", "MainMenu"), ui->editMainText, SLOT(redo()), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_K));
 	pAction->setStatusTip(tr("Redo last edit"));
 	pAction->setToolTip(tr("Redo Last Edit"));
 	connect(ui->editMainText, SIGNAL(redoAvailable(bool)), pAction, SLOT(setEnabled(bool)));
 	pEditMenu->addSeparator();
-	pAction = pEditMenu->addAction(tr("Cu&t", "MainMenu"), ui->editMainText, SLOT(cut()), QKeySequence(Qt::SHIFT + Qt::Key_Delete));
+	pAction = pEditMenu->addAction(tr("Cu&t", "MainMenu"), ui->editMainText, SLOT(cut()), QKeySequence(Qt::SHIFT | Qt::Key_Delete));
 	pAction->setStatusTip(tr("Cut Text"));
 	pAction->setToolTip(tr("Cut Text"));
 	connect(ui->editMainText, SIGNAL(copyAvailable(bool)), pAction, SLOT(setEnabled(bool)));
-	pAction = pEditMenu->addAction(tr("&Copy", "MainMenu"), ui->editMainText, SLOT(copy()), QKeySequence(Qt::CTRL + Qt::Key_Insert));
+	pAction = pEditMenu->addAction(tr("&Copy", "MainMenu"), ui->editMainText, SLOT(copy()), QKeySequence(Qt::CTRL | Qt::Key_Insert));
 	pAction->setStatusTip(tr("Copy Text"));
 	pAction->setToolTip(tr("Copy Text"));
 	connect(ui->editMainText, SIGNAL(copyAvailable(bool)), pAction, SLOT(setEnabled(bool)));
-	pAction = pEditMenu->addAction(tr("&Paste", "MainMenu"), ui->editMainText, SLOT(paste()), QKeySequence(Qt::SHIFT + Qt::Key_Insert));
+	pAction = pEditMenu->addAction(tr("&Paste", "MainMenu"), ui->editMainText, SLOT(paste()), QKeySequence(Qt::SHIFT | Qt::Key_Insert));
 	pAction->setStatusTip(tr("Paste Text"));
 	pAction->setToolTip(tr("Paste Text"));
-	pAction = pEditMenu->addAction(tr("Select &All", "MainMenu"), ui->editMainText, SLOT(selectAll()), QKeySequence(Qt::CTRL + Qt::Key_A));
+	pAction = pEditMenu->addAction(tr("Select &All", "MainMenu"), ui->editMainText, SLOT(selectAll()), QKeySequence(Qt::CTRL | Qt::Key_A));
 	pAction->setStatusTip(tr("Select All"));
 	pAction->setToolTip(tr("Select All"));
 	pEditMenu->addSeparator();
-	pAction = pEditMenu->addAction(tr("&Search", "MainMenu"), this, SLOT(en_Search()), QKeySequence(Qt::CTRL + Qt::Key_F));
+	pAction = pEditMenu->addAction(tr("&Search", "MainMenu"), this, SLOT(en_Search()), QKeySequence(Qt::CTRL | Qt::Key_F));
 	pAction->setStatusTip(tr("Search"));
 	pAction->setToolTip(tr("Search"));
-	pAction = pEditMenu->addAction(tr("Search and &Replace", "MainMenu"), this, SLOT(en_SearchReplace()), QKeySequence(Qt::CTRL + Qt::Key_H));
+	pAction = pEditMenu->addAction(tr("Search and &Replace", "MainMenu"), this, SLOT(en_SearchReplace()), QKeySequence(Qt::CTRL | Qt::Key_H));
 	pAction->setStatusTip(tr("Search and Replace"));
 	pAction->setToolTip(tr("Search and Replace"));
 

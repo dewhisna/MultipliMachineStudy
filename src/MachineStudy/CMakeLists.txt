@@ -39,7 +39,8 @@ include(InstallRequiredSystemLibraries)
 
 # ---------------------------------------------------------
 
-find_package(Qt5 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Help Sql)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Help Sql)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets PrintSupport Help Sql)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -174,52 +175,105 @@ endif()
 
 add_library(MainWindow ${MainWindow_SOURCES})
 target_compile_options(MainWindow PUBLIC ${MY_COMPILE_OPTIONS})
-qt5_use_modules(MainWindow Core Gui Widgets Help Sql PrintSupport)
-target_link_libraries(MainWindow QtFindReplaceDialog)
+target_link_libraries(MainWindow
+	QtFindReplaceDialog
+	Qt${QT_VERSION_MAJOR}::Core
+	Qt${QT_VERSION_MAJOR}::Gui
+	Qt${QT_VERSION_MAJOR}::Widgets
+	Qt${QT_VERSION_MAJOR}::Help
+	Qt${QT_VERSION_MAJOR}::Sql
+	Qt${QT_VERSION_MAJOR}::PrintSupport
+)
 
 add_library(CustomerDialog ${CustomerDialog_SOURCES})
 target_compile_options(CustomerDialog PUBLIC ${MY_COMPILE_OPTIONS})
-qt5_use_modules(CustomerDialog Core Gui Widgets)
+target_link_libraries(CustomerDialog
+	Qt${QT_VERSION_MAJOR}::Core
+	Qt${QT_VERSION_MAJOR}::Gui
+	Qt${QT_VERSION_MAJOR}::Widgets
+)
 
 add_library(FormationCalcDialog ${FormationCalcDialog_SOURCES})
 target_compile_options(FormationCalcDialog PUBLIC ${MY_COMPILE_OPTIONS})
-qt5_use_modules(FormationCalcDialog Core Gui Widgets)
+target_link_libraries(FormationCalcDialog
+	Qt${QT_VERSION_MAJOR}::Core
+	Qt${QT_VERSION_MAJOR}::Gui
+	Qt${QT_VERSION_MAJOR}::Widgets
+)
 
 add_library(ProductionCalcDialog ${ProductionCalcDialog_SOURCES})
 target_compile_options(ProductionCalcDialog PUBLIC ${MY_COMPILE_OPTIONS})
-qt5_use_modules(ProductionCalcDialog Core Gui Widgets)
+target_link_libraries(ProductionCalcDialog
+	Qt${QT_VERSION_MAJOR}::Core
+	Qt${QT_VERSION_MAJOR}::Gui
+	Qt${QT_VERSION_MAJOR}::Widgets
+)
 
 add_library(GradeCalcDialog ${GradeCalcDialog_SOURCES})
 target_compile_options(GradeCalcDialog PUBLIC ${MY_COMPILE_OPTIONS})
-qt5_use_modules(GradeCalcDialog Core Gui Widgets)
+target_link_libraries(GradeCalcDialog
+	Qt${QT_VERSION_MAJOR}::Core
+	Qt${QT_VERSION_MAJOR}::Gui
+	Qt${QT_VERSION_MAJOR}::Widgets
+)
 
 add_library(HeadBoxDilutionDialog ${HeadBoxDilutionDialog_SOURCES})
 target_compile_options(HeadBoxDilutionDialog PUBLIC ${MY_COMPILE_OPTIONS})
-qt5_use_modules(HeadBoxDilutionDialog Core Gui Widgets)
+target_link_libraries(HeadBoxDilutionDialog
+	Qt${QT_VERSION_MAJOR}::Core
+	Qt${QT_VERSION_MAJOR}::Gui
+	Qt${QT_VERSION_MAJOR}::Widgets
+)
 
 add_library(FormConstDialog ${FormConstDialog_SOURCES})
 target_compile_options(FormConstDialog PUBLIC ${MY_COMPILE_OPTIONS})
-qt5_use_modules(FormConstDialog Core Gui Widgets)
+target_link_libraries(FormConstDialog
+	Qt${QT_VERSION_MAJOR}::Core
+	Qt${QT_VERSION_MAJOR}::Gui
+	Qt${QT_VERSION_MAJOR}::Widgets
+)
 
 add_library(PipeFlowCalcDialog ${PipeFlowCalcDialog_SOURCES})
 target_compile_options(PipeFlowCalcDialog PUBLIC ${MY_COMPILE_OPTIONS})
-qt5_use_modules(PipeFlowCalcDialog Core Gui Widgets)
+target_link_libraries(PipeFlowCalcDialog
+	Qt${QT_VERSION_MAJOR}::Core
+	Qt${QT_VERSION_MAJOR}::Gui
+	Qt${QT_VERSION_MAJOR}::Widgets
+)
 
 add_library(AreaFlowCalcDialog ${AreaFlowCalcDialog_SOURCES})
 target_compile_options(AreaFlowCalcDialog PUBLIC ${MY_COMPILE_OPTIONS})
-qt5_use_modules(AreaFlowCalcDialog Core Gui Widgets)
+target_link_libraries(AreaFlowCalcDialog
+	Qt${QT_VERSION_MAJOR}::Core
+	Qt${QT_VERSION_MAJOR}::Gui
+	Qt${QT_VERSION_MAJOR}::Widgets
+)
 
 add_library(YieldPerDayDialog ${YieldPerDayDialog_SOURCES})
 target_compile_options(YieldPerDayDialog PUBLIC ${MY_COMPILE_OPTIONS})
-qt5_use_modules(YieldPerDayDialog Core Gui Widgets)
+target_link_libraries(YieldPerDayDialog
+	Qt${QT_VERSION_MAJOR}::Core
+	Qt${QT_VERSION_MAJOR}::Gui
+	Qt${QT_VERSION_MAJOR}::Widgets
+)
 
 add_library(AboutDialog ${AboutDialog_SOURCES})
 target_compile_options(AboutDialog PUBLIC ${MY_COMPILE_OPTIONS})
-qt5_use_modules(AboutDialog Core Gui Widgets)
+target_link_libraries(AboutDialog
+	Qt${QT_VERSION_MAJOR}::Core
+	Qt${QT_VERSION_MAJOR}::Gui
+	Qt${QT_VERSION_MAJOR}::Widgets
+)
 
 add_library(HelpDialog ${HelpDialog_SOURCES})
 target_compile_options(HelpDialog PUBLIC ${MY_COMPILE_OPTIONS})
-qt5_use_modules(HelpDialog Core Gui Widgets Help Sql)
+target_link_libraries(HelpDialog
+	Qt${QT_VERSION_MAJOR}::Core
+	Qt${QT_VERSION_MAJOR}::Gui
+	Qt${QT_VERSION_MAJOR}::Widgets
+	Qt${QT_VERSION_MAJOR}::Help
+	Qt${QT_VERSION_MAJOR}::Sql
+)
 
 if(WIN32)
 	set(GUI_TYPE WIN32)
