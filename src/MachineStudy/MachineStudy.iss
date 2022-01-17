@@ -32,7 +32,7 @@ Name: "en"; MessagesFile: "compiler:Default.isl"
 AppName=Multipli Machine Study
 AppId=MultipliMachineStudy
 AppMutex=MachineStudyMutex
-#expr VersionInstaller(".\MachineStudy.exe")
+#expr VersionInstaller(".\bin\MachineStudy.exe")
 AppCopyright=Copyright (C) 2018 Multipli Machinery Corp.
 AppPublisher=Dewtronics/Multipli
 AppPublisherURL=http://www.dewtronics.com/
@@ -40,72 +40,26 @@ AppContact=Multipli Machinery Corp.
 AppSupportURL=http://www.multiplimachine.com/
 AppSupportPhone=makepaper@multiplimachine.com
 AppComments=Multipli Cylinder Paper Machine Study Software
-DefaultDirName={pf}\MultipliMachineStudy
+DefaultDirName={commonpf}\MultipliMachineStudy
 DefaultGroupName=Multipli Machine Study
 ShowLanguageDialog=auto
-LicenseFile=gpl-3.0.txt
+LicenseFile=.\bin\gpl-3.0.txt
 Compression=lzma
 ChangesAssociations=no
 PrivilegesRequired=admin
+
+[CustomMessages]
+InstallingVCredist=Installing VCRedist...
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}";
 Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription: {cm:AdditionalIcons};
 
 [Files]
-; Main app:
-Source: ".\MachineStudy.exe"; DestDir: "{app}"; Flags: ignoreversion;
-
-; Qt Libraries:
-Source: ".\Qt5Core.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: ".\Qt5Gui.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: ".\Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: ".\Qt5PrintSupport.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: ".\Qt5Help.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: ".\Qt5Sql.dll"; DestDir: "{app}"; Flags: ignoreversion;
-
-; Qt plugins/platforms
-Source: ".\platforms\qwindows.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion;
-Source: ".\platforms\qminimal.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion;
-
-; Qt plugins/platformthemes
-Source: ".\platformthemes\qflatpak.dll"; DestDir: "{app}\platformthemes"; Flags: ignoreversion;
-
-; Qt plugins/generic
-Source: ".\generic\qtuiotouchplugin.dll"; DestDir: "{app}\generic"; Flags: ignoreversion;
-
-; Qt plugins/imageformats
-Source: ".\imageformats\qgif.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
-Source: ".\imageformats\qicns.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
-Source: ".\imageformats\qico.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
-Source: ".\imageformats\qjpeg.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
-Source: ".\imageformats\qwbmp.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion;
-
-; Qt plugins/styles
-Source: ".\styles\qwindowsvistastyle.dll"; DestDir: "{app}\styles"; Flags: ignoreversion;
-
-; Qt plugins/sqldrivers
-Source: ".\sqldrivers\qsqlite.dll"; DestDir: "{app}\sqldrivers"; Flags: ignoreversion;
-
-; Qt plugins/printsupport
-Source: ".\printsupport\windowsprintersupport.dll"; DestDir: "{app}\printsupport"; Flags: ignoreversion;
-
-; MSVCRT:
-Source: ".\msvcp140.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: ".\vcruntime140.dll"; DestDir: "{app}"; Flags: ignoreversion;
-Source: ".\concrt140.dll"; DestDir: "{app}"; Flags: ignoreversion;
-
-; HelpFiles:
-Source: ".\machstdy.qch"; DestDir: "{app}"; Flags: ignoreversion;
-Source: ".\machstdy.qhc"; DestDir: "{app}"; Flags: ignoreversion;
-
-; PDF HelpFiles:
-Source: ".\MachineStudy.pdf"; DestDir: "{app}"; Flags: ignoreversion;
-Source: ".\MachineStudy-Examples.pdf"; DestDir: "{app}"; Flags: ignoreversion;
-
-; license
-Source: ".\LICENSE"; DestDir: "{app}"; Flags: ignoreversion;
-Source: ".\gpl-3.0.txt"; DestDir: "{app}"; Flags: ignoreversion;
+; Main app and Qt files:
+Source: ".\bin\*"; Excludes: "vc_redist.x64.exe"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs;
+; Runtime:
+Source: ".\bin\vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: ignoreversion;
 
 [Icons]
 Name: "{group}\{#SetupSetting("AppName")}"; Filename: "{app}\MachineStudy.exe";
@@ -116,4 +70,5 @@ Name: "{commondesktop}\{#SetupSetting("AppName")}"; Filename: "{app}\MachineStud
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#SetupSetting("AppName")}"; Filename: "{app}\MachineStudy.exe"; Tasks: quicklaunchicon;
 
 [Run]
-Filename: {app}\MachineStudy.exe; Description: {cm:LaunchProgram,{#SetupSetting("AppName")}}; Flags: nowait postinstall skipifsilent
+Filename: "{tmp}\vc_redist.x64.exe"; Description: "{cm:InstallingVCredist}"; StatusMsg: "{cm:InstallingVCredist}"; Parameters: "/quiet"; Flags: waituntilterminated
+Filename: "{app}\MachineStudy.exe"; Description: {cm:LaunchProgram,{#SetupSetting("AppName")}}; Flags: nowait postinstall skipifsilent
