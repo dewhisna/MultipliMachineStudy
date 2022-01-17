@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** Multipli Machine Study Application
-** Copyright (C) 2018 Multipli Machinery, Corp.
+** Copyright (C) 1994, 2018-2022 Multipli Machinery, Corp.
 ** Contact: http://multiplimachine.com/
 **
 ** This file is part of the Multipli Machine Study Application,
@@ -414,7 +414,7 @@ void CMainWindow::TextOutputStart(bool bSkipCustomer, bool bSkipAppend)
 			strTemp += QString(" v%1").arg(QApplication::applicationVersion());
 		}
 		ui->editMainText->append(strTemp);
-		ui->editMainText->append("Copyright(c)2018 Multipli Machinery");
+		ui->editMainText->append("Copyright(c)1994, 2018-2022 Multipli Machinery");
 		ui->editMainText->append(QString());
 		m_bHaveTextOutput = true;
 	}

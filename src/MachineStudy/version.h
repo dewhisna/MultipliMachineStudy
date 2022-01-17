@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** Multipli Machine Study Application
-** Copyright (C) 2018 Multipli Machinery, Corp.
+** Copyright (C) 1994, 2018-2022 Multipli Machinery, Corp.
 ** Contact: http://multiplimachine.com/
 **
 ** This file is part of the Multipli Machine Study Application,
@@ -50,7 +50,7 @@
 #define VER_COMPANYNAME_STR			"Multipli Machinery Corp\0"
 #define VER_FILEDESCRIPTION_STR		"Multipli Cylinder Machine Study\0"
 #define VER_INTERNALNAME_STR		"Multipli Cylinder Machine Study\0"
-#define VER_LEGALCOPYRIGHT_STR		"Copyright(c)2018 Multipli Machinery Corp.\0"
+#define VER_LEGALCOPYRIGHT_STR		"Copyright(c)1994, 2018-2022 Multipli Machinery Corp.\0"
 #define VER_ORIGINALFILENAME_STR	"MachineStudy.exe\0"
 #define VER_PRODUCTNAME_STR			"Multipli Cylinder Machine Study\0"
 

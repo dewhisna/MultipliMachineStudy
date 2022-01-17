@@ -3,7 +3,7 @@
  <comment>****************************************************************************
 **
 ** Multipli Machine Study Application
-** Copyright (C) 2018 Multipli Machinery, Corp.
+** Copyright (C) 1994, 2018-2022 Multipli Machinery, Corp.
 ** Contact: http://multiplimachine.com/
 **
 ** This file is part of the Multipli Machine Study Application,
@@ -53,7 +53,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-Copyright (C) 2018 Multipli Machinery Corp.
+Copyright (C) 1994, 2018-2022 Multipli Machinery Corp.
 Contact: http://multiplimachine.com/
 Written and developed for Multipli Machinery by Donald Whisnant</string>
         </property>
@@ -135,7 +135,7 @@ Written and developed for Multipli Machinery by Donald Whisnant</string>
          </font>
         </property>
         <property name="text">
-         <string>Copyright(c)2018 Multipli Machinery Corp.</string>
+         <string>Copyright(c)1994, 2018-2022 Multipli Machinery Corp.</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
