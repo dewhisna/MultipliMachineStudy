@@ -1,9 +1,11 @@
 version: build{build}
 
 image:
-  - Visual Studio 2017
+  - Visual Studio 2019
 
 clone_folder: C:\Documents\programs\MultipliMachineStudy
+
+build: off
 
 init:
   # Set "build version number" to "short-commit-hash" or when tagged to "tag name" (Travis style)
@@ -19,31 +21,31 @@ init:
         Update-AppveyorBuild -Version "dev-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))-$env:APPVEYOR_BUILD_NUMBER"
       }
   - mkdir C:\util
-  - set QTDIR=C:\Qt\5.11.1\msvc2015
-  - set "PATH=%PATH%;%QTDIR%\bin;C:\util;C:\Program Files (x86)\Inno Setup 5"
-  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
+  - set QTDIR=C:\Qt\6.2.2\msvc2019_64
+  - set "PATH=%PATH%;%QTDIR%\bin;C:\util;C:\Program Files (x86)\Inno Setup 6"
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
 
 install:
   - git submodule update --init --recursive
-  - curl -sSL https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-win.zip > C:\util\ninja-win.zip
+  - curl -sSL https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-win.zip > C:\util\ninja-win.zip
   - 7z e -oC:\util C:\util\ninja-win.zip
 
 before_build:
   - cd C:\Documents\programs\MultipliMachineStudy\src
-  - mkdir build-MachineStudy-Qt_5_11_1-Release
+  - mkdir build-MachineStudy-Qt_6_2_2-Release
 
 build_script:
-  - cd build-MachineStudy-Qt_5_11_1-Release
-  - cmake ..\MachineStudy -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja -DCMAKE_CXX_COMPILER=cl.exe -DCMAKE_C_COMPILER=cl.exe -DSPECIALVERSION=%SPECIALVERSION%
+  - cd build-MachineStudy-Qt_6_2_2-Release
+  - cmake ..\MachineStudy -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja -DSPECIALVERSION=%SPECIALVERSION% -DCMAKE_PREFIX_PATH=%QTDIR%
   - cmake --build . --target all
 
 after_build:
   - cmake --build . --target install
-  - cd install\bin
+  - cd install
   - iscc MachineStudy.iss
 
 test: off
 
 artifacts:
-  - path: 'src\build-MachineStudy-Qt_5_11_1-Release\install\bin\Output\*.exe'
+  - path: 'src\build-MachineStudy-Qt_6_2_2-Release\install\Output\*.exe'
 
