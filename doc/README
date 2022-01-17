@@ -2,6 +2,8 @@ To create the Machine Study Help, do the following:
 
 - Install Microsoft HTML Help Workshop/Compiler from
 https://docs.microsoft.com/en-gb/previous-versions/windows/desktop/htmlhelp/microsoft-html-help-downloads
+UPDATE: On Linux, install HTML Help Workshop with:  winetricks hhw
+(the other versions don't work correctly on Wine!)
 
 - Use it to Convert the Machine Stduy WinHelp Project:
     - New -> Project
@@ -23,6 +25,10 @@ $ cd qthelp
 $ rmdir -p html/qthelp/html/
 $ rmdir -p images/qthelp/images/
 $ <QT_BIN_PATH>/qcollectiongenerator ../machstdy.qhcp -o machstdy.qhc
+or:
+$ <QT_BIN_PATH>/qhelpgenerator ../machstdy.qhcp -o machstdy.qhc
+(NOTE: on new versions of Qt, 'qcollectiongenerator' is called 'qhelpgenerator')
+
 
 - Test with:
 $ <QT_BIN_PATH>/assistant -collectionFile machstdy.qhc
