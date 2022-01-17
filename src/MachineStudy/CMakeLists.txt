@@ -324,97 +324,55 @@ install(FILES
 )
 
 if(WIN32)
-	# Include DLLs needed on Windows:
+	# Locate windeployqt utility:
+	if (Qt${QT_VERSION_MAJOR}_FOUND AND TARGET Qt${QT_VERSION_MAJOR}::qmake AND NOT TARGET Qt${QT_VERSION_MAJOR}::windeployqt)
+		get_target_property(_Qt${QT_VERSION_MAJOR}_qmake_location Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+
+		execute_process(
+			COMMAND "${_Qt${QT_VERSION_MAJOR}_qmake_location}" -query QT_INSTALL_PREFIX
+			RESULT_VARIABLE return_code
+			OUTPUT_VARIABLE qt${QT_VERSION_MAJOR}_install_prefix
+			OUTPUT_STRIP_TRAILING_WHITESPACE
+		)
+
+		set(imported_location "${qt${QT_VERSION_MAJOR}_install_prefix}/bin/windeployqt.exe")
+
+		if (EXISTS ${imported_location})
+			add_executable(Qt${QT_VERSION_MAJOR}::windeployqt IMPORTED)
+
+			set_target_properties(Qt${QT_VERSION_MAJOR}::windeployqt PROPERTIES
+				IMPORTED_LOCATION ${imported_location}
+			)
+		endif()
+	endif()
+
+	# Include DLLs needed on Windows by calling windeployqt:
 	#	This logic doesn't work for Linux since the rpath
 	#	won't be set, plus Qt needs to be compiled with
 	#	the other system dependencies too...
 	add_custom_command(
 		TARGET ${PROJECT_NAME} POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Core> $<TARGET_FILE_DIR:${PROJECT_NAME}>
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Gui> $<TARGET_FILE_DIR:${PROJECT_NAME}>
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE_DIR:${PROJECT_NAME}>
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::PrintSupport> $<TARGET_FILE_DIR:${PROJECT_NAME}>
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Help> $<TARGET_FILE_DIR:${PROJECT_NAME}>
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Sql> $<TARGET_FILE_DIR:${PROJECT_NAME}>
-		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/platforms
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QWindowsIntegrationPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/platforms
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QMinimalIntegrationPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/platforms
-		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/platformthemes
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QFlatpakThemePlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/platformthemes
-		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/generic
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QTuioTouchPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/generic
-		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/imageformats
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QGifPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/imageformats
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QICNSPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/imageformats
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QICOPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/imageformats
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QJpegPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/imageformats
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QWbmpPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/imageformats
-		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/styles
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QWindowsVistaStylePlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/styles
-		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/sqldrivers
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QSQLiteDriverPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/sqldrivers
-		COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:${PROJECT_NAME}>/printsupport
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QWindowsPrinterSupportPlugin> $<TARGET_FILE_DIR:${PROJECT_NAME}>/printsupport
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE $<TARGET_FILE_DIR:${PROJECT_NAME}>
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/gpl-3.0.txt $<TARGET_FILE_DIR:${PROJECT_NAME}>
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/MachineStudy.iss $<TARGET_FILE_DIR:${PROJECT_NAME}>
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/version.iss $<TARGET_FILE_DIR:${PROJECT_NAME}>
+		COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_CURRENT_BINARY_DIR}/windeployqt"
+		COMMAND set PATH=%PATH%$<SEMICOLON>${qt${QT_VERSION_MAJOR}_install_prefix}/bin
+		COMMAND Qt${QT_VERSION_MAJOR}::windeployqt --no-translations --dir "${CMAKE_CURRENT_BINARY_DIR}/windeployqt" "$<TARGET_FILE_DIR:${PROJECT_NAME}>/$<TARGET_FILE_NAME:${PROJECT_NAME}>"
 	)
 
-#	message(status "Core: ${Qt5Core_PLUGINS}  Gui: ${Qt5Gui_PLUGINS}  Widgets: ${Qt5Widgets_PLUGINS}  Help: ${Qt5Help_PLUGINS}  PrintSupport: ${Qt5PrintSupport_PLUGINS}  SQL: ${Qt5Sql_PLUGINS}")
-
 	install(FILES
-			$<TARGET_FILE:Qt5::Core>
-			$<TARGET_FILE:Qt5::Gui>
-			$<TARGET_FILE:Qt5::Widgets>
-			$<TARGET_FILE:Qt5::PrintSupport>
-			$<TARGET_FILE:Qt5::Help>
-			$<TARGET_FILE:Qt5::Sql>
+			"$<TARGET_FILE_DIR:${PROJECT_NAME}>/$<TARGET_FILE_NAME:${PROJECT_NAME}>"
 			LICENSE
 			gpl-3.0.txt
-			MachineStudy.iss
-			version.iss
 			DESTINATION bin
 	)
 
 	install(FILES
-			$<TARGET_FILE:Qt5::QWindowsIntegrationPlugin>
-			$<TARGET_FILE:Qt5::QMinimalIntegrationPlugin>
-			DESTINATION bin/platforms
+		MachineStudy.iss
+		version.iss
+		DESTINATION .
 	)
 
-	install(FILES
-			$<TARGET_FILE:Qt5::QFlatpakThemePlugin>
-			DESTINATION bin/platformthemes
-	)
-
-	install(FILES
-			$<TARGET_FILE:Qt5::QTuioTouchPlugin>
-			DESTINATION bin/generic
-	)
-
-	install(FILES
-			$<TARGET_FILE:Qt5::QGifPlugin>
-			$<TARGET_FILE:Qt5::QICNSPlugin>
-			$<TARGET_FILE:Qt5::QICOPlugin>
-			$<TARGET_FILE:Qt5::QJpegPlugin>
-			$<TARGET_FILE:Qt5::QWbmpPlugin>
-			DESTINATION bin/imageformats
-	)
-
-	install(FILES
-			$<TARGET_FILE:Qt5::QWindowsVistaStylePlugin>
-			DESTINATION bin/styles
-	)
-
-	install(FILES
-			$<TARGET_FILE:Qt5::QSQLiteDriverPlugin>
-			DESTINATION bin/sqldrivers
-	)
-
-	install(FILES
-			$<TARGET_FILE:Qt5::QWindowsPrinterSupportPlugin>
-			DESTINATION bin/printsupport
+	install(DIRECTORY
+		"${CMAKE_CURRENT_BINARY_DIR}/windeployqt/"
+		DESTINATION bin
 	)
 endif()
 
