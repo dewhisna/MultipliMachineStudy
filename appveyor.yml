@@ -5,8 +5,6 @@ image:
 
 clone_folder: C:\Documents\programs\MultipliMachineStudy
 
-build: off
-
 init:
   # Set "build version number" to "short-commit-hash" or when tagged to "tag name" (Travis style)
   - ps: >-
