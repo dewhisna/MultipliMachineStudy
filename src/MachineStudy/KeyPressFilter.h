@@ -38,7 +38,7 @@ class CKeyPressEnterEater : public QObject
     Q_OBJECT
 
 protected:
-    bool eventFilter(QObject *obj, QEvent *event)
+    virtual bool eventFilter(QObject *obj, QEvent *event) override
 	{
 		if (event->type() == QEvent::KeyPress) {
 			QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);

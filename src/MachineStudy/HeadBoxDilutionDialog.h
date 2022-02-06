@@ -42,7 +42,7 @@ class CHeadBoxDilutionDialog : public QDialog
 
 public:
 	explicit CHeadBoxDilutionDialog(bool bStandAlone, bool bMetric, QWidget *parent = nullptr);
-	~CHeadBoxDilutionDialog();
+	virtual ~CHeadBoxDilutionDialog();
 
 	struct TDialogValues {
 		TDialogValues()

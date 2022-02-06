@@ -39,7 +39,7 @@ class CAboutDialog : public QDialog
 
 public:
 	explicit CAboutDialog(QWidget *parent = nullptr);
-	~CAboutDialog();
+	virtual ~CAboutDialog();
 
 private:
 	Ui::CAboutDialog *ui;

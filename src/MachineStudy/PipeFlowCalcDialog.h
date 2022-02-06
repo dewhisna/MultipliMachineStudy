@@ -41,7 +41,7 @@ class CPipeFlowCalcDialog : public QDialog
 
 public:
 	explicit CPipeFlowCalcDialog(bool bStandAlone, bool bMetric, QWidget *parent = nullptr);
-	~CPipeFlowCalcDialog();
+	virtual ~CPipeFlowCalcDialog();
 
 	struct TDialogValues {
 		TDialogValues()

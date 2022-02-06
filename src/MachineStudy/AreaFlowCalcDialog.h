@@ -40,7 +40,7 @@ class CAreaFlowCalcDialog : public QDialog
 
 public:
 	explicit CAreaFlowCalcDialog(bool bStandAlone, bool bMetric, QWidget *parent = nullptr);
-	~CAreaFlowCalcDialog();
+	virtual ~CAreaFlowCalcDialog();
 
 	struct TDialogValues {
 		TDialogValues()

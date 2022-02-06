@@ -40,7 +40,7 @@ class CFormConstDialog : public QDialog
 
 public:
 	explicit CFormConstDialog(bool bStandAlone, bool bMetric, QWidget *parent = nullptr);
-	~CFormConstDialog();
+	virtual ~CFormConstDialog();
 
 	struct TDialogValues {
 		TDialogValues()

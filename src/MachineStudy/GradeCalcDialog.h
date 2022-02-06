@@ -40,7 +40,7 @@ class CGradeCalcDialog : public QDialog
 
 public:
 	explicit CGradeCalcDialog(bool bStandAlone, bool bMetric, QWidget *parent = nullptr);
-	~CGradeCalcDialog();
+	virtual ~CGradeCalcDialog();
 
 	struct TDialogValues {
 		TDialogValues()

@@ -54,7 +54,7 @@ public:
 	static const QString helpDocument(HELP_DOCUMENT_ENUM nDocument);
 
 	explicit CHelpDialog(QWidget *parent = nullptr);
-	~CHelpDialog();
+	virtual ~CHelpDialog();
 
 public slots:
 	void navigateTo(const QString &strDocument = QString());

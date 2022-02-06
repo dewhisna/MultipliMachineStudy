@@ -51,7 +51,7 @@ class CMainWindow : public QMainWindow
 
 public:
 	explicit CMainWindow(QWidget *parent = nullptr);
-	~CMainWindow();
+	virtual ~CMainWindow();
 
 signals:
 	void metricModeSelected(bool bMetric);		// Inbound or menu option toggle

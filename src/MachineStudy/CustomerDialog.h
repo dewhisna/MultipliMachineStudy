@@ -39,7 +39,7 @@ class CCustomerDialog : public QDialog
 
 public:
 	explicit CCustomerDialog(QWidget *parent = nullptr);
-	~CCustomerDialog();
+	virtual ~CCustomerDialog();
 
 	struct {
 		QString m_strCustomer;

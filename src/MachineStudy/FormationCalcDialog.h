@@ -41,7 +41,7 @@ class CFormationCalcDialog : public QDialog
 
 public:
 	explicit CFormationCalcDialog(bool bStandAlone, bool bMetric, QWidget *parent = nullptr);
-	~CFormationCalcDialog();
+	virtual ~CFormationCalcDialog();
 
 	enum CYLINDER_SIZE_ENUM {
 		CSE_36in = 0,

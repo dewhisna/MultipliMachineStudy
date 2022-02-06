@@ -40,7 +40,7 @@ class CYieldPerDayDialog : public QDialog
 
 public:
 	explicit CYieldPerDayDialog(bool bMetric, QWidget *parent = nullptr);
-	~CYieldPerDayDialog();
+	virtual ~CYieldPerDayDialog();
 
 	struct TDialogValues {
 		TDialogValues()

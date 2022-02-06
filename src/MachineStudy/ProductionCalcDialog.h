@@ -41,7 +41,7 @@ class CProductionCalcDialog : public QDialog
 
 public:
 	explicit CProductionCalcDialog(bool bStandAlone, bool bMetric, QWidget *parent = nullptr);
-	~CProductionCalcDialog();
+	virtual ~CProductionCalcDialog();
 
 	struct TDialogValues {
 		TDialogValues()
