@@ -1,7 +1,7 @@
 ;****************************************************************************
 ;**
 ;** Multipli Machine Study Application
-;** Copyright (C) 1994, 2018-2022 Multipli Machinery, Corp.
+;** Copyright (C) 1994, 2018-2025 Multipli Machinery, Corp.
 ;** Contact: http://multiplimachine.com/
 ;**
 ;** This file is part of the Multipli Machine Study Application,
@@ -33,7 +33,7 @@ AppName=Multipli Machine Study
 AppId=MultipliMachineStudy
 AppMutex=MachineStudyMutex
 #expr VersionInstaller(".\bin\MachineStudy.exe")
-AppCopyright=Copyright (C) 1994, 2018-2022 Multipli Machinery Corp.
+AppCopyright=Copyright (C) 1994, 2018-2025 Multipli Machinery Corp.
 AppPublisher=Dewtronics/Multipli
 AppPublisherURL=http://www.dewtronics.com/
 AppContact=Multipli Machinery Corp.

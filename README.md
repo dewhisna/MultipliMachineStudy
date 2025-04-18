@@ -20,9 +20,9 @@ For more application details, refer to the online help: [https://github.com/dewh
 
 To install the application on Windows, simply download the latest installer from [https://github.com/dewhisna/MultipliMachineStudy/releases](https://github.com/dewhisna/MultipliMachineStudy/releases) or obtain it from [Multipli Machinery](http://multiplimachine.com/).  Copy the installer package to a convenient location on your computer, such as your desktop.  Right-click the installer package and select "Run as Admin" and follow the directions.
 
-To run this application on other operating systems, or to extend or modify the Windows version, it will be necessary for you to compile it yourself from the source code provided on GitHub at [https://github.com/dewhisna/MultipliMachineStudy](https://github.com/dewhisna/MultipliMachineStudy).  To compile it from source, you will need to download the correct Qt package for your computer from [https://www.qt.io/](https://www.qt.io/) -- Qt 5.11.1 was used during the development.  You will need to install [CMake](https://cmake.org/) -- version 3.12.1 was used in creating this app.  And you will need a C++11 compliant compiler -- gcc 4.8.4 and MSVC 2017 were used during application development and are known to work.
+To run this application on other operating systems, or to extend or modify the Windows version, it will be necessary for you to compile it yourself from the source code provided on GitHub at [https://github.com/dewhisna/MultipliMachineStudy](https://github.com/dewhisna/MultipliMachineStudy).  To compile it from source, you will need to download the correct Qt package for your computer from [https://www.qt.io/](https://www.qt.io/) -- Qt 6.5.3 was used during the development.  You will need to install [CMake](https://cmake.org/) -- version 4.0.0 was used in creating this app.  And you will need a C++11 compliant compiler -- gcc 13.3.0 and MSVC 2022 were used during application development and are known to work.
 
-To compile this application, simply launch Qt Creator, make sure you've configured CMake and the 5.11.1 Qt Kits, and then open the `src/MachineStudy/CMakeLists.txt` file as a project.  Wait for Creator and CMake to configure the project, and select build.
+To compile this application, simply launch Qt Creator, make sure you've configured CMake and the 6.5.3 Qt Kits, and then open the `src/MachineStudy/CMakeLists.txt` file as a project.  Wait for Creator and CMake to configure the project, and select build.
 
 ----------
 
@@ -37,7 +37,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 'Free' software refers to your free uninhibited ability to access and obtain this software in its exact original form, and your freedom to copy and share it with others, not necessarily that it was obtained 'for free', as reasonable fees may be charged to recover distribution costs.
 
-Copyright © 2018 Multipli Machinery Corp.
+Copyright © 2018-2025 Multipli Machinery Corp.
 
 Contact: [http://multiplimachine.com/](http://multiplimachine.com/)
 

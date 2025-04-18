@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** Multipli Machine Study Application
-** Copyright (C) 1994, 2018-2022 Multipli Machinery, Corp.
+** Copyright (C) 1994, 2018-2025 Multipli Machinery, Corp.
 ** Contact: http://multiplimachine.com/
 **
 ** This file is part of the Multipli Machine Study Application,
