@@ -21,7 +21,7 @@ init:
   - mkdir C:\util
   - set QTDIR=C:\Qt\6.5.3\msvc2019_64
   - set "PATH=%PATH%;%QTDIR%\bin;C:\util;C:\Program Files (x86)\Inno Setup 6"
-  - call "C:\Program Files (x86)\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+  - call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
 
 install:
   - git submodule update --init --recursive
