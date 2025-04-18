@@ -1,7 +1,7 @@
 version: build{build}
 
 image:
-  - Visual Studio 2019
+  - Visual Studio 2022
 
 clone_folder: C:\MultipliMachineStudy
 
@@ -19,9 +19,9 @@ init:
         Update-AppveyorBuild -Version "dev-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))-$env:APPVEYOR_BUILD_NUMBER"
       }
   - mkdir C:\util
-  - set QTDIR=C:\Qt\6.2.2\msvc2019_64
+  - set QTDIR=C:\Qt\6.5.3\msvc2019_64
   - set "PATH=%PATH%;%QTDIR%\bin;C:\util;C:\Program Files (x86)\Inno Setup 6"
-  - call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
 
 install:
   - git submodule update --init --recursive
@@ -30,10 +30,10 @@ install:
 
 before_build:
   - cd C:\MultipliMachineStudy\src
-  - mkdir build-MachineStudy-Qt_6_2_2-Release
+  - mkdir build-MachineStudy-Qt_6_5_3-Release
 
 build_script:
-  - cd build-MachineStudy-Qt_6_2_2-Release
+  - cd build-MachineStudy-Qt_6_5_3-Release
   - cmake ..\MachineStudy -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja -DSPECIALVERSION=%SPECIALVERSION% -DCMAKE_PREFIX_PATH=%QTDIR%
   - cmake --build . --target all
 
@@ -45,5 +45,5 @@ after_build:
 test: off
 
 artifacts:
-  - path: 'src\build-MachineStudy-Qt_6_2_2-Release\install\Output\*.exe'
+  - path: 'src\build-MachineStudy-Qt_6_5_3-Release\install\Output\*.exe'
 
